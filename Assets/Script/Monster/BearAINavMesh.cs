@@ -111,4 +111,12 @@ public class BearAINavMesh : MonoBehaviour
         currentState = AIState.Idle;
         agent.isStopped = false; // 공격 후 이동 재개
     }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, attackRange); // 공격 범위
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, dodgeRange); // 회피 범위
+    }
 }
