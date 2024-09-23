@@ -1,4 +1,4 @@
-﻿/*using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,9 +26,9 @@ public class PlayerController : MonoBehaviour
     public bool playerEventOff = true;
 
     private Rigidbody _rigidbody;
-    private AudioSource _audioSource;
+   // private AudioSource _audioSource;
 
-    public AudioClip footstepClip;
+    //public AudioClip footstepClip;
     public float footstepInterval = 0.5f;
     private float footstepTimer;
 
@@ -40,7 +40,7 @@ public class PlayerController : MonoBehaviour
         isMove = true;
         instance = this;
         _rigidbody = GetComponent<Rigidbody>();
-        _audioSource = GetComponent<AudioSource>();
+      //  _audioSource = GetComponent<AudioSource>();
     }
 
     void Start()
@@ -51,17 +51,16 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (playerEventOff && WakeUp.isWakeUp && isMove)
+        
             Move();
     }
 
     private void LateUpdate()
     {
         //&& WakeUp.isWakeUp
-        if (canLook && !GrandMaMove.isGrandEvent && WakeUp.isWakeUp && playerEventOff && isMove)
-        {
+       
             CameraLook();
-        }
+        
     }
 
     public static void IsMove(bool changeMove)  //이걸 통해서 바꾸면 된다.
@@ -88,8 +87,8 @@ public class PlayerController : MonoBehaviour
         dir.y = _rigidbody.velocity.y;
 
         _rigidbody.velocity = dir;
-
-        HandleFootsteps();
+        //Debug.Log("여기에 들어오나");
+       // HandleFootsteps();
     }
 
     void HandleFootsteps()
@@ -99,7 +98,7 @@ public class PlayerController : MonoBehaviour
             footstepTimer -= Time.deltaTime;
             if (footstepTimer <= 0)
             {
-                _audioSource.PlayOneShot(footstepClip);
+             //   _audioSource.PlayOneShot(footstepClip);
                 footstepTimer = footstepInterval;
             }
         }
@@ -125,6 +124,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnMoveInput(InputAction.CallbackContext context)
     {
+        Debug.Log("여기에 들어오나");
         if (context.phase == InputActionPhase.Performed)
         {
             curMovementInput = context.ReadValue<Vector2>();
@@ -145,30 +145,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void OnInteraction(InputAction.CallbackContext context)
-    {
-        if (context.phase == InputActionPhase.Started && SeeDetector.isInteraction)
-        {
-
-            if (MainManager.Instance != null && MainManager.Instance.objectEventHandler != null)
-            {
-                var target = MainManager.Instance.objectEventHandler.targrt;
-                if (target != null)
-                {
-                    Debug.Log("여기는 들어오니");
-                    MainManager.Instance.objectEventHandler.Match(target);
-                }
-                else
-                {
-                    Debug.LogWarning("Target is null in OnInteraction.");
-                }
-            }
-            else
-            {
-                Debug.LogWarning("MainManager or objectEventHandler is null in OnInteraction.");
-            }
-        }
-    }
+    
 
     public void OnSensitivityIncrease(InputAction.CallbackContext context)
     {
@@ -211,39 +188,6 @@ public class PlayerController : MonoBehaviour
 
         return false;
     }
+}
 
-    /*private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawRay(transform.position + (transform.forward * 0.2f), Vector3.down);
-        Gizmos.DrawRay(transform.position + (-transform.forward * 0.2f), Vector3.down);
-        Gizmos.DrawRay(transform.position + (transform.right * 0.2f), Vector3.down);
-        Gizmos.DrawRay(transform.position + (-transform.right * 0.2f), Vector3.down);
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-
-        // �� ���� ���� ���� ��ġ
-        Vector3[] rayOrigins = new Vector3[4]
-        {
-        transform.position + (transform.forward * 0.2f) + (Vector3.up * 0.01f),
-        transform.position + (-transform.forward * 0.2f) + (Vector3.up * 0.01f),
-        transform.position + (transform.right * 0.2f) + (Vector3.up * 0.01f),
-        transform.position + (-transform.right * 0.2f) + (Vector3.up * 0.01f)
-        };
-
-        // ���� �׸���
-        for (int i = 0; i < rayOrigins.Length; i++)
-        {
-            Gizmos.DrawRay(rayOrigins[i], Vector3.down * 0.1f);
-        }
-    }
-
-    public void ToggleCursor(bool toggle)
-    {
-        Cursor.lockState = toggle ? CursorLockMode.None : CursorLockMode.Locked;
-        canLook = !toggle;
-    }
-}*/
+   
