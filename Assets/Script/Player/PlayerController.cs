@@ -124,7 +124,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnMoveInput(InputAction.CallbackContext context)
     {
-        Debug.Log("여기에 들어오나");
+        
         if (context.phase == InputActionPhase.Performed)
         {
             curMovementInput = context.ReadValue<Vector2>();
@@ -139,9 +139,12 @@ public class PlayerController : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Started)
         {
+            Debug.Log("여기에 들어오나");
             if (IsGrounded())
+            {
+                Debug.Log("여기에 들어오나2");
                 _rigidbody.AddForce(Vector2.up * jumpForce, ForceMode.Impulse);
-
+            }
         }
     }
 
@@ -170,6 +173,7 @@ public class PlayerController : MonoBehaviour
 
     private bool IsGrounded()
     {
+       
         Ray[] rays = new Ray[4]
         {
             new Ray(transform.position + (transform.forward * 0.2f) + (Vector3.up * 0.01f) , Vector3.down),
