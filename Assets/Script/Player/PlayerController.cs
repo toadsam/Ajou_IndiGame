@@ -32,6 +32,8 @@ public class PlayerController : MonoBehaviour
     public float footstepInterval = 0.5f;
     private float footstepTimer;
 
+    private float startSpeed;
+
     public static bool isMove;
 
     private Animator animator;
@@ -48,6 +50,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        startSpeed = moveSpeed;
         Cursor.lockState = CursorLockMode.Locked;
         footstepTimer = footstepInterval;
     }
@@ -67,10 +70,12 @@ public class PlayerController : MonoBehaviour
         if (Keyboard.current.leftShiftKey.isPressed)
         {
             animator.SetBool("isRunning", true);
+            moveSpeed = 2 * startSpeed;
         }
         else
         {
             animator.SetBool("isRunning", false);
+            moveSpeed = startSpeed;
         }
     }
 
