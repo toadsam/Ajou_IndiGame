@@ -34,19 +34,44 @@ public class PlayerController : MonoBehaviour
 
     public static bool isMove;
 
+    private Animator animator;
+
     public static PlayerController instance;
     private void Awake()
     {
         isMove = true;
         instance = this;
         _rigidbody = GetComponent<Rigidbody>();
-      //  _audioSource = GetComponent<AudioSource>();
+        animator = GetComponent<Animator>(); // Animator 컴포넌트 참조
+                                             //  _audioSource = GetComponent<AudioSource>();
     }
 
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
         footstepTimer = footstepInterval;
+    }
+    private void Update()
+    {
+        // 걷는 상태로 전환
+        if (curMovementInput != Vector2.zero)
+        {
+            animator.SetBool("isWalking", true);
+        }
+        else
+        {
+            animator.SetBool("isWalking", false);
+        }
+
+        // 달리기 상태 (Shift 키를 누를 때)
+        if (Keyboard.current.leftShiftKey.isPressed)
+        {
+            animator.SetBool("isRunning", true);
+        }
+        else
+        {
+            animator.SetBool("isRunning", false);
+        }
     }
 
     private void FixedUpdate()
@@ -139,16 +164,15 @@ public class PlayerController : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Started)
         {
-            Debug.Log("여기에 들어오나");
             if (IsGrounded())
             {
-                Debug.Log("여기에 들어오나2");
                 _rigidbody.AddForce(Vector2.up * jumpForce, ForceMode.Impulse);
+                animator.SetTrigger("isJumping"); // 점프 애니메이션 트리거
             }
         }
     }
 
-    
+
 
     public void OnSensitivityIncrease(InputAction.CallbackContext context)
     {

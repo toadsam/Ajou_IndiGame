@@ -389,15 +389,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 1ebc6f1a734dfee45a9c167e632c6473, type: 3}
       propertyPath: m_LocalScale.x
-      value: 5
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1ebc6f1a734dfee45a9c167e632c6473, type: 3}
       propertyPath: m_LocalScale.y
-      value: 5
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1ebc6f1a734dfee45a9c167e632c6473, type: 3}
       propertyPath: m_LocalScale.z
-      value: 5
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 1ebc6f1a734dfee45a9c167e632c6473, type: 3}
       propertyPath: m_LocalPosition.x
@@ -490,6 +490,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 1ebc6f1a734dfee45a9c167e632c6473, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1196390458}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 1ebc6f1a734dfee45a9c167e632c6473, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1196390462}
   m_SourcePrefab: {fileID: 100100000, guid: 1ebc6f1a734dfee45a9c167e632c6473, type: 3}
 --- !u!1 &1009793194
 GameObject:
@@ -774,6 +777,27 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!95 &1196390462
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1196390456}
+  m_Enabled: 1
+  m_Avatar: {fileID: 9000000, guid: c90356e30b3396445bf355d241075bd1, type: 3}
+  m_Controller: {fileID: 9100000, guid: 08f8613481b2c2e40bbf74276d7d81d6, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &1526496132
 GameObject:
   m_ObjectHideFlags: 0
@@ -893,7 +917,7 @@ Transform:
   m_GameObject: {fileID: 1660958904}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0, y: 0.2129, z: -0.115}
+  m_LocalPosition: {x: -0, y: 0.368, z: -0.258}
   m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children:
