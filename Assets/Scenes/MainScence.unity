@@ -140,7 +140,7 @@ GameObject:
   - component: {fileID: 650403479}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -188,7 +188,7 @@ MonoBehaviour:
   jumpForce: 10
   groundLayerMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 16
   cameraContainer: {fileID: 1660958905}
   minXLook: -85
   maxXLook: 85

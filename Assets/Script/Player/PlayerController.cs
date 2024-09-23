@@ -184,8 +184,10 @@ public class PlayerController : MonoBehaviour
 
         for (int i = 0; i < rays.Length; i++)
         {
-            if (Physics.Raycast(rays[i], 0.1f, groundLayerMask))
+            Debug.DrawRay(rays[i].origin, rays[i].direction * 0.1f, Color.red); // 레이 길이를 1.0f로 설정해 시각적으로 확인
+            if (Physics.Raycast(rays[i], 3.0f, groundLayerMask))
             {
+                Debug.Log("여기에 들어오나2");
                 return true;
             }
         }
@@ -193,5 +195,4 @@ public class PlayerController : MonoBehaviour
         return false;
     }
 }
-
-   
+  
