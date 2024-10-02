@@ -1,6 +1,6 @@
 public abstract class StateMachine
 {
-    protected IState currentState;
+    /*protected IState currentState;
 
     public void ChangeState(IState state)
     {
@@ -22,5 +22,5 @@ public abstract class StateMachine
     public void PhysicsUpdate()
     {
         currentState?.PhysicsUpdate();
-    }
+    }*/
 }
