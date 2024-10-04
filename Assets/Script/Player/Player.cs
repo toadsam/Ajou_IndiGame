@@ -22,4 +22,4 @@ public class Player : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-}
+}//분수 car 1층에 입구가 있다.엘베x 여자화장실 2층 남자화장실3층 1층은 2개다 있다.
