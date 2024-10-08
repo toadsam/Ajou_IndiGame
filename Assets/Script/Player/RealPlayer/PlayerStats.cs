@@ -3,6 +3,8 @@ using UnityEngine.UI; // UI 슬라이더를 위해 추가
 
 public class PlayerStats : MonoBehaviour
 {
+    public static PlayerStats instance;
+
     [Header("Health and Mana")]
     public int maxHealth = 100;
     public int currentHealth;
@@ -20,6 +22,20 @@ public class PlayerStats : MonoBehaviour
 
     [Header("UI")]
     public Slider healthSlider; // 체력바 슬라이더 참조
+
+    private void Awake()
+    {
+        // 싱글톤 인스턴스가 이미 존재하는지 확인
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject); // 씬 전환 시에도 유지
+        }
+        else
+        {
+            Destroy(gameObject); // 이미 인스턴스가 존재하면 자신을 파괴
+        }
+    }
 
     private void Start()
     {

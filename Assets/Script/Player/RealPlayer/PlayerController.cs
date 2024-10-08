@@ -38,6 +38,10 @@ public class PlayerController : MonoBehaviour
 
     private Animator animator;
 
+    [Header("Attack")]
+    public Collider attackCollider; // 공격 범위로 사용할 Trigger Collider
+    public bool isAttacking = false; // 공격 중인지 여부
+
     public static PlayerController instance;
     private void Awake()
     {
@@ -46,6 +50,7 @@ public class PlayerController : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
         animator = GetComponent<Animator>(); // Animator 컴포넌트 참조
                                              //  _audioSource = GetComponent<AudioSource>();
+        attackCollider.enabled = false; // 처음에는 공격 범위를 비활성화
     }
 
     void Start()
@@ -205,11 +210,28 @@ public class PlayerController : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            Debug.Log("Attack triggered");
+           // Debug.Log("Attack triggered");
             animator.SetTrigger("isAttacking"); // 공격 애니메이션 트리거
             moveSpeed = 0;
         }
     }
+
+    // 애니메이션 이벤트: 공격 시작 시 호출
+    public void StartAttack()
+    {
+       // Debug.Log("Attack started.");
+       isAttacking = true;
+        attackCollider.enabled = true; // 공격 범위 활성화
+    }
+
+    // 애니메이션 이벤트: 공격 종료 시 호출
+    public void EndAttack()
+    {
+        //Debug.Log("Attack ended.");
+        attackCollider.enabled = false; // 공격 범위 비활성화
+        isAttacking = false;
+    }
+
 
     private bool IsGrounded()
     {
@@ -227,12 +249,28 @@ public class PlayerController : MonoBehaviour
             Debug.DrawRay(rays[i].origin, rays[i].direction * 0.1f, Color.red); // 레이 길이를 1.0f로 설정해 시각적으로 확인
             if (Physics.Raycast(rays[i], 3.0f, groundLayerMask))
             {
-                Debug.Log("여기에 들어오나2");
+                
                 return true;
             }
         }
 
         return false;
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log(isAttacking);
+        if (isAttacking && other.CompareTag("Monster"))
+        {
+            Debug.Log("일로 들어옴?");
+            MonsterStats monster = other.GetComponent<MonsterStats>();
+            if (monster != null)
+            {
+                int attackDamage = PlayerStats.instance.strength;
+                monster.TakeDamage(attackDamage);
+                Debug.Log("Dealt " + attackDamage + " damage to the monster.");
+            }
+        }
+    }
+
 }
-  

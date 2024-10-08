@@ -41,17 +41,17 @@ public class Monstor : MonoBehaviour
         switch (currentState)
         {
             case AIState.Idle:
-                Debug.Log("평소");
+             //   Debug.Log("평소");
                 MoveTowardsPlayer();
                 CheckForStateChange();
                 break;
             case AIState.Attack:
                 //Debug.Log("이 부분은 공격을 하니?");
-                Debug.Log("공격");
+               // Debug.Log("공격");
                 Attack();
                 break;
             case AIState.Dodge:
-                Debug.Log("피하기");
+               // Debug.Log("피하기");
                 Dodge();
                 break;
         }
@@ -85,7 +85,7 @@ public class Monstor : MonoBehaviour
         }
         else if (distanceToPlayer < attackRange && attackTimer >= attackCooldown)  // 5 2
         {
-            Debug.Log("범위시점");
+           // Debug.Log("범위시점");
             currentState = AIState.Attack;
         }
     }
@@ -119,7 +119,7 @@ public class Monstor : MonoBehaviour
     void Attack()
     {
         agent.isStopped = true;
-        Debug.Log("몬스터가 공격하는 부분에 들어왔다");
+      //  Debug.Log("몬스터가 공격하는 부분에 들어왔다");
         animator.SetTrigger("isAttacking");
 
         // 공격 범위 내에서 플레이어에게 데미지를 입힘
