@@ -383,7 +383,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monsterPrefab: {fileID: 1584514993}
-  poolSize: 50
+  poolSize: 5
 --- !u!4 &807027987
 Transform:
   m_ObjectHideFlags: 0

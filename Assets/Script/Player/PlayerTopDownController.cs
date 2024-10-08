@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerTopDownController : MonoBehaviour
 {
@@ -49,6 +50,16 @@ public class PlayerTopDownController : MonoBehaviour
         // Rigidbody를 이용해 이동 처리
         Vector3 newPosition = _rigidbody.position + movement * moveSpeed * Time.fixedDeltaTime;
         _rigidbody.MovePosition(newPosition);
+    }
+
+    public void OnAttackInput(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+        {
+            Debug.Log("Attack triggered");
+            animator.SetTrigger("isAttacking"); // 공격 애니메이션 트리거
+            movement = Vector3.zero;
+        }
     }
 
     private void RotateTowardsMovementDirection()

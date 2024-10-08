@@ -6,10 +6,10 @@ public class Monstor : MonoBehaviour
     public Transform player; // 플레이어의 위치
     public float attackRange = 3f; // 공격 범위
     public float dodgeRange = 5f; // 회피 범위
-    public float attackCooldown = 2f; // 공격 후 대기 시간
+    public float attackCooldown = 0f; // 공격 후 대기 시간
     public int attackDamage = 10; // 몬스터의 공격력
 
-    private float attackTimer = 0f; // 공격 쿨타임
+    private float attackTimer = 5f; // 공격 쿨타임
     private NavMeshAgent agent; // NavMesh 에이전트
     private Vector3 dodgePosition; // 회피 위치
     private Animator animator; // 애니메이터
@@ -41,13 +41,17 @@ public class Monstor : MonoBehaviour
         switch (currentState)
         {
             case AIState.Idle:
+                Debug.Log("평소");
                 MoveTowardsPlayer();
                 CheckForStateChange();
                 break;
             case AIState.Attack:
+                //Debug.Log("이 부분은 공격을 하니?");
+                Debug.Log("공격");
                 Attack();
                 break;
             case AIState.Dodge:
+                Debug.Log("피하기");
                 Dodge();
                 break;
         }
@@ -79,7 +83,7 @@ public class Monstor : MonoBehaviour
             currentState = AIState.Dodge;
             SetDodgePosition();
         }
-        else if (distanceToPlayer < attackRange && attackTimer >= attackCooldown)
+        else if (distanceToPlayer < attackRange && attackTimer >= attackCooldown)  // 5 2
         {
             Debug.Log("범위시점");
             currentState = AIState.Attack;

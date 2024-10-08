@@ -200,6 +200,17 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    // 마우스 좌클릭 시 공격 애니메이션 실행
+    public void OnAttackInput(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+        {
+            Debug.Log("Attack triggered");
+            animator.SetTrigger("isAttacking"); // 공격 애니메이션 트리거
+            moveSpeed = 0;
+        }
+    }
+
     private bool IsGrounded()
     {
        
