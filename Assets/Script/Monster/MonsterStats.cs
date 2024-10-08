@@ -20,6 +20,7 @@ public class MonsterStats : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
+        Debug.Log("데미지 입기");
         currentHealth -= damage;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
 
