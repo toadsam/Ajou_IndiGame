@@ -37,6 +37,20 @@ public class PlayerItemManager : MonoBehaviour
         originalSize = playerTransform.localScale;
         originalSpeed = playerController.moveSpeed;
         originalStrength = playerStats.strength;  // PlayerStats에서 힘 값 가져옴
+        //StartCoroutine(ChangeSize(5, 5, true));
+    }
+
+    public void StartSizeChange(float multiplier, float duration, bool increaseStrength = false) 
+    {
+        StartCoroutine(ChangeSize(multiplier, duration, increaseStrength));
+    }
+    public void StartSpeedChange(float multiplier, float duration)
+    {
+        StartCoroutine(ChangeSpeed(multiplier,duration));
+    }
+    public void StartSizeTiny(float multiplier, float duration, bool increaseStrength = false)
+    {
+        StartCoroutine(ChangeSize(multiplier, duration, increaseStrength));
     }
 
     public IEnumerator ChangeSize(float multiplier, float duration, bool increaseStrength = false)
@@ -51,6 +65,8 @@ public class PlayerItemManager : MonoBehaviour
         Vector3 targetSize = originalSize * multiplier;
         Vector3 startSize = playerTransform.localScale;
 
+        Debug.Log($"Start Size: {startSize}, Target Size: {targetSize}");
+
         // 힘 증가
         if (increaseStrength)
         {
@@ -61,17 +77,18 @@ public class PlayerItemManager : MonoBehaviour
         float elapsedTime = 0f;
         Debug.Log($"ChangeSize Coroutine Started. Duration: {duration}");
 
-        // 크기가 점점 커지도록 루프
+        // 크기가 점진적으로 커지도록 하는 루프
         while (elapsedTime < duration)
         {
             elapsedTime += Time.deltaTime;
-            float t = elapsedTime / duration;  // 진행 비율 (0에서 1로 변화)
+            float t = elapsedTime / duration;  // 0에서 1까지의 비율
 
             // 크기 변경
             playerTransform.localScale = Vector3.Lerp(startSize, targetSize, t);
-            Debug.Log($"Current Size: {playerTransform.localScale}");
+            Debug.Log($"Current Size (During Increase): {playerTransform.localScale}");
 
-            yield return null;  // 다음 프레임까지 대기
+            // 매 프레임 대기
+            yield return null;
         }
 
         // 최종 크기 설정
@@ -81,7 +98,7 @@ public class PlayerItemManager : MonoBehaviour
         // 효과가 끝난 후 원래 크기로 되돌림
         yield return new WaitForSeconds(duration);
 
-        // 원래 크기 복원 루프
+        // 크기 복원하는 루프
         elapsedTime = 0f;
         while (elapsedTime < duration)
         {
@@ -91,15 +108,14 @@ public class PlayerItemManager : MonoBehaviour
             yield return null;
         }
 
+        // 크기 복원 완료 후 원래 상태로 돌아옴
         playerTransform.localScale = originalSize;
         playerStats.strength = originalStrength;
         Debug.Log("Player size and strength returned to normal.");
     }
 
-
-
-// 속도 변화 메서드
-public IEnumerator ChangeSpeed(float multiplier, float duration)
+    // 속도 변화 메서드
+    public IEnumerator ChangeSpeed(float multiplier, float duration)
     {
         // 속도 증가
         playerController.moveSpeed = originalSpeed * multiplier;
