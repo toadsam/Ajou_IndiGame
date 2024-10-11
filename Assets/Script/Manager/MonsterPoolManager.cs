@@ -6,7 +6,7 @@ public class MonsterPoolManager : MonoBehaviour
     public static MonsterPoolManager instance;
 
     public GameObject monsterPrefab; // 몬스터 프리팹
-    public int poolSize = 5; // 몬스터 최대 개수
+    public int poolSize = 20; // 몬스터 최대 개수
     private Queue<GameObject> monsterPool = new Queue<GameObject>();
 
     private void Awake()
