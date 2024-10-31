@@ -8,7 +8,7 @@ public class RobotAttack : MonoBehaviour
     public float attackRange = 4f;      // 공격 범위
     public float patrolRadius = 10f;    // 순찰 범위
     public float patrolUpdateInterval = 1f; // 순찰 위치 갱신 주기
-    public float punchInterval = 2f;    // 공격 간격
+    public float punchInterval = 1f;    // 공격 간격
     public ParticleSystem attackParticle; // 공격 파티클 시스템
     public Transform particleSpawnPoint; // 파티클 발사 위치
 
@@ -124,7 +124,7 @@ public class RobotAttack : MonoBehaviour
             attackParticle.Stop();  // 파티클 비활성화
             Debug.Log("파티클 비활성화");
 
-            yield return new WaitForSeconds(1f); // 2초 동안 공격 대기
+            yield return new WaitForSeconds(0.5f); // 2초 동안 공격 대기
         }
 
         isAttacking = false;  // 공격 주기 종료
