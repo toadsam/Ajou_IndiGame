@@ -4,10 +4,10 @@ using UnityEngine.AI;
 
 public class RobotAttack : MonoBehaviour
 {
-    public float detectionRange = 10f;  // 적 탐지 범위
-    public float attackRange = 2f;      // 공격 범위
+    public float detectionRange = 15f;  // 적 탐지 범위
+    public float attackRange = 4f;      // 공격 범위
     public float patrolRadius = 10f;    // 순찰 범위
-    public float patrolUpdateInterval = 2f; // 순찰 위치 갱신 주기
+    public float patrolUpdateInterval = 1f; // 순찰 위치 갱신 주기
     public float punchInterval = 2f;    // 공격 간격
     public ParticleSystem attackParticle; // 공격 파티클 시스템
     public Transform particleSpawnPoint; // 파티클 발사 위치
@@ -112,9 +112,9 @@ public class RobotAttack : MonoBehaviour
 
             // 크기와 길이가 고정된 상태로 파티클 발사
             var mainModule = attackParticle.main;
-            mainModule.startSizeXMultiplier = 1.0f; // 원하는 고정된 X 크기 설정
-            mainModule.startSizeYMultiplier = 1.0f; // 원하는 고정된 Y 크기 설정
-            mainModule.startSizeZMultiplier = 1.0f; // 원하는 고정된 Z 크기 설정
+            mainModule.startSizeXMultiplier = 2.0f; // 원하는 고정된 X 크기 설정
+            mainModule.startSizeYMultiplier = 2.0f; // 원하는 고정된 Y 크기 설정
+            mainModule.startSizeZMultiplier = 2.0f; // 원하는 고정된 Z 크기 설정
 
             attackParticle.Play();  // 파티클 활성화
             Debug.Log($"{targetMonster.name}에게 파티클 발사!");
@@ -124,7 +124,7 @@ public class RobotAttack : MonoBehaviour
             attackParticle.Stop();  // 파티클 비활성화
             Debug.Log("파티클 비활성화");
 
-            yield return new WaitForSeconds(2f); // 2초 동안 공격 대기
+            yield return new WaitForSeconds(1f); // 2초 동안 공격 대기
         }
 
         isAttacking = false;  // 공격 주기 종료
