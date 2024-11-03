@@ -100,6 +100,7 @@ public class PlayerStats : MonoBehaviour
         //currentHealth = maxHealth;
         //strength += 2;
         //defense += 1;
+        InGameSkillManager.instance.LevelUp();
 
         Debug.Log($"레벨 업! 현재 레벨: {level}, 다음 레벨까지 필요 경험치: {experienceToNextLevel}");
     }

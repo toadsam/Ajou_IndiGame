@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18028378, g: 0.22571412, b: 0.30692285, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028331, g: 0.2257133, b: 0.3069217, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -13370,6 +13370,7 @@ GameObject:
   m_Component:
   - component: {fileID: 807027987}
   - component: {fileID: 807027988}
+  - component: {fileID: 807027989}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -13412,6 +13413,25 @@ MonoBehaviour:
   - {fileID: 333348910}
   - {fileID: 1743340519}
   - {fileID: 1284270175}
+--- !u!114 &807027989
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 807027985}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e15962af0c649f542aa5a983d773d843, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  availableSkills:
+  - {fileID: -862400209834695190, guid: 9a8fb44b50ce57947875dd97ec9566c6, type: 3}
+  - {fileID: -862400209834695190, guid: 9a8fb44b50ce57947875dd97ec9566c6, type: 3}
+  - {fileID: -862400209834695190, guid: 9a8fb44b50ce57947875dd97ec9566c6, type: 3}
+  acquiredSkills: []
+  skillSelectionUI: {fileID: 0}
+  skillButtons: []
 --- !u!1001 &807320616
 PrefabInstance:
   m_ObjectHideFlags: 0
