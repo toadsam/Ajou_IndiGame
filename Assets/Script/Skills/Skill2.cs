@@ -112,6 +112,8 @@ public class Skill2 : MonoBehaviour
         if (isParticleActive && other.CompareTag("Monster"))
         {
             MonsterStats monsterStats = other.GetComponent<MonsterStats>();
+            Rigidbody monsterRigidbody = other.GetComponent<Rigidbody>();
+
             if (monsterStats != null)
             {
                 monsterStats.TakeDamage(damageAmount);
@@ -120,6 +122,13 @@ public class Skill2 : MonoBehaviour
             else
             {
                 Debug.LogWarning($"{other.name}에 MonsterStats가 없습니다.");
+            }
+
+            // 부드럽게 밀어내기
+            if (monsterRigidbody != null)
+            {
+                Vector3 knockbackDirection = (other.transform.position - transform.position).normalized;
+                monsterRigidbody.AddForce(knockbackDirection * 200f, ForceMode.VelocityChange); // 부드럽게 밀어내는 힘
             }
         }
         else
