@@ -8,6 +8,8 @@ public class MonsterStats : MonoBehaviour
 
     public Slider healthSlider;
 
+    public int experienceReward = 25;
+
     private void Start()
     {
         currentHealth = maxHealth;
@@ -38,6 +40,8 @@ public class MonsterStats : MonoBehaviour
     private void Die()
     {
         Debug.Log("Monster has died.");
+        PlayerStats.instance.GainExperience(experienceReward);
+
         Destroy(gameObject); // 몬스터 오브젝트 제거
         if (healthSlider != null)
         {

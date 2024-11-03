@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI; // UI 슬라이더를 위해 추가
 
 public class PlayerStats : MonoBehaviour
 {
@@ -20,20 +19,21 @@ public class PlayerStats : MonoBehaviour
     public float healthRegenRate = 1f; // 체력 재생률 (초당 회복)
     public float manaRegenRate = 2f;   // 마나 재생률 (초당 회복)
 
-    [Header("UI")]
-    public Slider healthSlider; // 체력바 슬라이더 참조
+    [Header("Level and Experience")]
+    public int level = 1;
+    public int experience = 0;
+    public int experienceToNextLevel = 100;
 
     private void Awake()
     {
-        // 싱글톤 인스턴스가 이미 존재하는지 확인
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject); // 씬 전환 시에도 유지
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
-            Destroy(gameObject); // 이미 인스턴스가 존재하면 자신을 파괴
+            Destroy(gameObject);
         }
     }
 
@@ -41,23 +41,14 @@ public class PlayerStats : MonoBehaviour
     {
         currentHealth = maxHealth;
         currentMana = maxMana;
-
-        // 체력 슬라이더 초기화
-        if (healthSlider != null)
-        {
-            healthSlider.maxValue = maxHealth;
-            healthSlider.value = currentHealth;
-        }
     }
 
     private void Update()
     {
         RegenerateHealth();
         RegenerateMana();
-        UpdateHealthBar(); // 체력바 업데이트
     }
 
-    // 체력 회복
     private void RegenerateHealth()
     {
         if (currentHealth < maxHealth)
@@ -67,7 +58,6 @@ public class PlayerStats : MonoBehaviour
         }
     }
 
-    // 마나 회복
     private void RegenerateMana()
     {
         if (currentMana < maxMana)
@@ -77,14 +67,11 @@ public class PlayerStats : MonoBehaviour
         }
     }
 
-    // 체력 감소 함수 (몬스터의 공격을 받을 때 호출)
     public void TakeDamage(int damage)
     {
         int finalDamage = Mathf.Max(damage - defense, 0);
         currentHealth -= finalDamage;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
-
-        UpdateHealthBar(); // 체력이 감소할 때 체력바 업데이트
 
         if (currentHealth <= 0)
         {
@@ -92,13 +79,29 @@ public class PlayerStats : MonoBehaviour
         }
     }
 
-    // 체력바 업데이트
-    private void UpdateHealthBar()
+    public void GainExperience(int amount)
     {
-        if (healthSlider != null)
+        experience += amount;
+        Debug.Log($"경험치 획득: {amount} / 총 경험치: {experience}");
+
+        if (experience >= experienceToNextLevel)
         {
-            healthSlider.value = currentHealth;
+            LevelUp();
         }
+    }
+
+    private void LevelUp()
+    {
+        level++;
+        experience -= experienceToNextLevel;
+        experienceToNextLevel *= 2; // 다음 레벨로 가는 데 필요한 경험치 2배 증가
+
+        //maxHealth += 10;
+        //currentHealth = maxHealth;
+        //strength += 2;
+        //defense += 1;
+
+        Debug.Log($"레벨 업! 현재 레벨: {level}, 다음 레벨까지 필요 경험치: {experienceToNextLevel}");
     }
 
     private void Die()
