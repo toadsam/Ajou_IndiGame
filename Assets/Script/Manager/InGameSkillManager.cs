@@ -60,6 +60,7 @@ public class InGameSkillManager : MonoBehaviour
         {
             acquiredSkills.Add(selectedSkill);
             Debug.Log($"{selectedSkill.skillName} Ω∫≈≥¿ª »πµÊ«ﬂΩ¿¥œ¥Ÿ!");
+            selectedSkill.ActivateEffectStage(1);
         }
 
         skillSelectionUI.SetActive(false);

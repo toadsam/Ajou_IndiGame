@@ -37,11 +37,12 @@ public class InGameSkill : MonoBehaviour
     }
 
     // 해당 단계의 효과 오브젝트를 활성화하는 메서드
-    private void ActivateEffectStage(int level)
+    public void ActivateEffectStage(int level)
     {
         switch (level)
         {
             case 1:
+                skillObject.SetActive(true);
                 stage1Effect?.SetActive(true);
                 Debug.Log($"{skillName}의 1단계 효과가 활성화되었습니다.");
                 break;
