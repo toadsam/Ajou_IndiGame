@@ -1,28 +1,25 @@
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class InGameSkillManager : MonoBehaviour
 {
     public static InGameSkillManager instance;
 
     public List<InGameSkill> availableSkills = new List<InGameSkill>(); // 전체 스킬 목록
-    public List<InGameSkill> acquiredSkills = new List<InGameSkill>(); // 획득한 스킬 목록
-    public GameObject skillSelectionUI; // 스킬 선택 UI
-    public Button[] skillButtons; // UI에서 선택 가능한 스킬 버튼들
+    public List<InGameSkill> acquiredSkills = new List<InGameSkill>();  // 획득한 스킬 목록
+    public GameObject skillSelectionUI;                                 // 스킬 선택 UI 패널
+    public Button[] skillButtons;                                       // 스킬 선택 버튼 배열 (3개)
+
     private InGameSkill[] randomSkills = new InGameSkill[3];
 
     private void Awake()
     {
         if (instance == null)
-        {
             instance = this;
-        }
         else
-        {
             Destroy(gameObject);
-        }
     }
 
     public void LevelUp()
@@ -34,13 +31,20 @@ public class InGameSkillManager : MonoBehaviour
     {
         skillSelectionUI.SetActive(true);
 
+        // 마우스 잠금 해제
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+
         // 랜덤으로 3개의 스킬 선택
         for (int i = 0; i < 3; i++)
         {
             randomSkills[i] = availableSkills[Random.Range(0, availableSkills.Count)];
-            skillButtons[i].GetComponentInChildren<Text>().text = randomSkills[i].skillName;
+            TextMeshProUGUI buttonText = skillButtons[i].GetComponentInChildren<TextMeshProUGUI>();
+            if (buttonText != null)
+                buttonText.text = randomSkills[i].skillName;
+
             skillButtons[i].onClick.RemoveAllListeners();
-            int index = i; // 클로저 문제 해결을 위해 인덱스 변수 생성
+            int index = i; // 람다 캡처 문제 해결을 위해 임시 변수 사용
             skillButtons[i].onClick.AddListener(() => SelectSkill(index));
         }
     }
@@ -49,11 +53,9 @@ public class InGameSkillManager : MonoBehaviour
     {
         InGameSkill selectedSkill = randomSkills[index];
 
-        // 이미 보유한 스킬인지 확인
+        // 스킬이 이미 획득되었는지 확인하고 강화 또는 획득
         if (acquiredSkills.Contains(selectedSkill))
-        {
             selectedSkill.Upgrade();
-        }
         else
         {
             acquiredSkills.Add(selectedSkill);
@@ -61,5 +63,9 @@ public class InGameSkillManager : MonoBehaviour
         }
 
         skillSelectionUI.SetActive(false);
+
+        // 마우스 잠금 복원
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 }
