@@ -14,4 +14,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/WoncheonHallScene.unity
     guid: d2aad7f28f8afea408d9661b92dcdfe1
+  - enabled: 1
+    path: Assets/Scenes/StartSenece.unity
+    guid: d72a6229246366d418104f8294abd548
+  - enabled: 1
+    path: Assets/Scenes/Student Union.unity
+    guid: 60522ce428764b142ad0b5581188158d
   m_configObjects: {}

@@ -39,6 +39,9 @@ public class SceneLoader : MonoBehaviour
             case "SanhakHallPortal":
                 sceneName = "SanhakHallScene";
                 break;
+            case "Student Union":
+                sceneName = "Student Union";
+                break;
             default:
                 Debug.LogWarning("포탈 이름이 잘못되었습니다: " + portalName);
                 return;
