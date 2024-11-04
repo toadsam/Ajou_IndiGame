@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca87027baa6dc4149a20c49b226327af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skillName: "\uB098\uB294 \uAC80\uC0AC"
+  skillName: SWORD
   skillDescription: "\uB098\uB294 \uC544\uC8FC\uB300\uD559\uAD50\uC758 \uCD5C\uACE0
     \uAC80\uAC1D\uC774\uB2E4"
   skillIcon: {fileID: 21300000, guid: 89ee8c9ef8e2a470582f0df5e8f7f97a, type: 3}

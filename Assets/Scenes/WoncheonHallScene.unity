@@ -14238,7 +14238,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   availableSkills:
   - {fileID: -862400209834695190, guid: 9a8fb44b50ce57947875dd97ec9566c6, type: 3}
-  - {fileID: -862400209834695190, guid: 9a8fb44b50ce57947875dd97ec9566c6, type: 3}
+  - {fileID: 3530380173132391233, guid: 4e7285716f4a9744385f05aa669111ad, type: 3}
   - {fileID: -862400209834695190, guid: 9a8fb44b50ce57947875dd97ec9566c6, type: 3}
   acquiredSkills: []
   skillSelectionUI: {fileID: 685311326}
