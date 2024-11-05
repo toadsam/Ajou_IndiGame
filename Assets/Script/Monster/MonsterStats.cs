@@ -8,7 +8,7 @@ public class MonsterStats : MonoBehaviour
 
     public Slider healthSlider;
 
-    public int experienceReward = 25;
+    public int experienceReward = 50;
 
     private void Start()
     {
