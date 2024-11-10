@@ -168,4 +168,4 @@ public class SpecialQuest : MonoBehaviour
 
         upgradeUI.SetActive(false);
     }
-}
+}//근데 아마 플레이어랑 랜덤 위치 같은 경우는 직접 찾아서 넣어야하는 경우로 만들어야 할 것 같다.
