@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class PlayerModeManager : MonoBehaviour
@@ -8,6 +9,7 @@ public class PlayerModeManager : MonoBehaviour
     public GameObject player; // 플레이어 오브젝트 참조
   //  public Transform topDownCameraPosition; // 탑다운 모드일 때 카메라 위치 지정
     public Transform firstPersonCameraParent; // 1인칭 모드일 때 카메라 부모 지정 (플레이어의 특정 위치, 예: 머리)
+    public Rigidbody playerRigidbody;
 
     public Camera mainCamera; // 메인 카메라 참조
 
@@ -46,7 +48,7 @@ public class PlayerModeManager : MonoBehaviour
             case PlayerMode.FirstPerson:
                 firstPersonController.enabled = true;
                 topDownController.enabled = false;
-
+                UnlockYPosition();
                 // 카메라를 플레이어의 특정 위치의 자식으로 설정
                 mainCamera.transform.SetParent(firstPersonCameraParent);
                 mainCamera.transform.localPosition = Vector3.zero; // 부모의 위치에 맞춤
@@ -58,6 +60,7 @@ public class PlayerModeManager : MonoBehaviour
             case PlayerMode.TopDown:
                 firstPersonController.enabled = false;
                 topDownController.enabled = true;
+                StartCoroutine(LockYPositionAfterDelay(3f));
 
                 // 카메라를 부모에서 분리하고 지정된 탑다운 위치로 설정
                 mainCamera.transform.SetParent(null);
@@ -92,5 +95,18 @@ public class PlayerModeManager : MonoBehaviour
         {
             SetPlayerMode(PlayerMode.FirstPerson); // 포탈에 닿으면 1인칭 모드로 변경
         }
+    }
+
+    private IEnumerator LockYPositionAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        playerRigidbody.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotation;
+        Debug.Log("Y축이 고정되었습니다.");
+    }
+
+    private void UnlockYPosition()
+    {
+        playerRigidbody.constraints = RigidbodyConstraints.None | RigidbodyConstraints.FreezeRotation;
+        Debug.Log("Y축 고정이 해제되었습니다.");
     }
 }

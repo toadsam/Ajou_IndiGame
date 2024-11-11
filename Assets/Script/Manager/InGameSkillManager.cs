@@ -12,6 +12,8 @@ public class InGameSkillManager : MonoBehaviour
     public GameObject skillSelectionUI;                                 // 스킬 선택 UI 패널
     public Button[] skillButtons;                                       // 스킬 선택 버튼 배열 (3개)
 
+    public TextMeshProUGUI playerLevel;
+
     private InGameSkill[] randomSkills = new InGameSkill[3];
 
     private void Awake()
@@ -30,7 +32,7 @@ public class InGameSkillManager : MonoBehaviour
     private void DisplaySkillSelection()
     {
         skillSelectionUI.SetActive(true);
-
+        playerLevel.text = PlayerStats.instance.level.ToString();
         // 마우스 잠금 해제
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
