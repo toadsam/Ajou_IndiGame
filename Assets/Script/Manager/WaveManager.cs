@@ -57,13 +57,13 @@ public class WaveManager : MonoBehaviour
         switch (currentWave)
         {
             case 1:
-                monstersRemaining = 1;
+                monstersRemaining = 50;
                 SpawnMonsters(firstWaveMonsterPrefab, monstersRemaining);
                 Debug.Log("첫 번째 웨이브 시작 - 남은 몬스터: " + monstersRemaining);
                 break;
             case 2:
                 SpawnSpecialNPC();
-                monstersRemaining = 2;
+                monstersRemaining = 70;
                 SpawnMonsters(secondWaveMonsterPrefab, monstersRemaining);
                 Debug.Log("두 번째 웨이브 시작 - 남은 몬스터: " + monstersRemaining);
                 break;
