@@ -242,7 +242,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  detectionRange: 10
+  detectionRange: 200
   attackRange: 3
   idleMoveRadius: 5
   maxHealth: 100
@@ -261,8 +261,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 320378beded754b46999613740acca94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
-  currentHealth: 100
+  maxHealth: 60
+  currentHealth: 60
   healthSlider: {fileID: 5335690171569815467}
   experienceReward: 50
 --- !u!1 &2645496314910973223

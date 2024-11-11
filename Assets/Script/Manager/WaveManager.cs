@@ -7,6 +7,8 @@ public class WaveManager : MonoBehaviour
 
     public GameObject firstWaveMonsterPrefab;
     public GameObject secondWaveMonsterPrefab;
+    public GameObject thirdWaveMonsterPrefab;
+    public GameObject fourthWaveMonsterPrefab;
     public GameObject bossPrefab;
     public Transform[] respawnPoints;
 
@@ -57,17 +59,29 @@ public class WaveManager : MonoBehaviour
         switch (currentWave)
         {
             case 1:
-                monstersRemaining = 50;
+                monstersRemaining = 5;
                 SpawnMonsters(firstWaveMonsterPrefab, monstersRemaining);
                 Debug.Log("첫 번째 웨이브 시작 - 남은 몬스터: " + monstersRemaining);
                 break;
             case 2:
                 SpawnSpecialNPC();
-                monstersRemaining = 70;
+                monstersRemaining = 5;
                 SpawnMonsters(secondWaveMonsterPrefab, monstersRemaining);
                 Debug.Log("두 번째 웨이브 시작 - 남은 몬스터: " + monstersRemaining);
                 break;
             case 3:
+                SpawnSpecialNPC();
+                monstersRemaining = 5;
+                SpawnMonsters(thirdWaveMonsterPrefab, monstersRemaining);
+                Debug.Log("세 번째 웨이브 시작 - 남은 몬스터: " + monstersRemaining);
+                break;
+            case 4:
+                SpawnSpecialNPC();
+                monstersRemaining = 5;
+                SpawnMonsters(fourthWaveMonsterPrefab, monstersRemaining);
+                Debug.Log("네 번째 웨이브 시작 - 남은 몬스터: " + monstersRemaining);
+                break;
+            case 5:
                 monstersRemaining = 1;
                 SpawnMonsters(bossPrefab, monstersRemaining);
                 Debug.Log("보스 웨이브 시작 - 남은 몬스터: " + monstersRemaining);
@@ -122,7 +136,7 @@ public class WaveManager : MonoBehaviour
             currentWave++;
             Debug.Log($"모든 몬스터 처치, 다음 웨이브로 넘어갑니다. 현재 웨이브: {currentWave}");
 
-            if (currentWave <= 3)
+            if (currentWave <= 5)
             {
                 StartWave(currentWave);
             }
