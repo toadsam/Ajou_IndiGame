@@ -4,12 +4,14 @@ using UnityEngine.UI;
 
 public class SpecialQuest : MonoBehaviour
 {
-    public GameObject player;                    // Player 오브젝트
-    public GameObject missionTarget;             // 미션 타겟 오브젝트
-    public GameObject monsterPrefab;             // 몬스터 프리팹
-    public Transform[] randomPositions;          // 랜덤 위치 배열
-    public GameObject upgradeUI;                 // 속성 선택 UI
-    public Button speedButton, attackButton, defenseButton;
+    public GameObject missionTargetPrefab;        // 미션 타겟 프리팹
+    public GameObject monsterPrefab;              // 몬스터 프리팹
+
+    private GameObject player;                    // Player 오브젝트
+    private GameObject missionTarget;             // 미션 타겟 인스턴스
+    private GameObject upgradeUI;                 // 속성 선택 UI 인스턴스
+    private Button speedButton, attackButton, defenseButton;
+    private Transform[] randomPositions;          // 랜덤 위치 배열
 
     private bool isMissionActive = false;
     private float timer = 30f;
@@ -19,14 +21,74 @@ public class SpecialQuest : MonoBehaviour
 
     private void Start()
     {
+        // 태그로 오브젝트 찾기
         player = GameObject.FindGameObjectWithTag("Player");
+        if (player == null)
+        {
+            Debug.LogError("Player 오브젝트를 찾을 수 없습니다.");
+            return;
+        }
 
-        // 속성 선택 버튼 클릭 이벤트
+        // randomPositions을 특정 태그로 할당
+        GameObject randomPositionParent = GameObject.FindGameObjectWithTag("RandomPosition");
+        if (randomPositionParent != null)
+        {
+            randomPositions = new Transform[randomPositionParent.transform.childCount];
+            for (int i = 0; i < randomPositionParent.transform.childCount; i++)
+            {
+                randomPositions[i] = randomPositionParent.transform.GetChild(i);
+            }
+            Debug.Log("Random Positions 배열 할당 완료");
+        }
+        else
+        {
+            Debug.LogError("RandomPosition 태그의 오브젝트가 없습니다.");
+            return;
+        }
+
+        // upgradeUI를 태그로 찾기
+        upgradeUI = GameObject.FindGameObjectWithTag("UpgradeUI");
+        if (upgradeUI == null)
+        {
+            Debug.LogError("UpgradeUI 오브젝트를 찾을 수 없습니다.");
+            return;
+        }
+
+        upgradeUI.SetActive(true); // 임시 활성화
+
+        // Panel 내부에서 버튼 찾기
+        Transform panel = upgradeUI.transform.Find("Panel");
+        if (panel == null)
+        {
+            Debug.LogError("Panel 오브젝트를 찾을 수 없습니다.");
+            return;
+        }
+
+        speedButton = panel.Find("SpeedButton")?.GetComponent<Button>();
+        attackButton = panel.Find("AttackButton")?.GetComponent<Button>();
+        defenseButton = panel.Find("DefenseButton")?.GetComponent<Button>();
+
+        // 각 버튼이 제대로 할당되었는지 확인하는 디버그 메시지
+        Debug.Log($"Speed Button 할당: {speedButton != null}");
+        Debug.Log($"Attack Button 할당: {attackButton != null}");
+        Debug.Log($"Defense Button 할당: {defenseButton != null}");
+
+        upgradeUI.SetActive(false); // 다시 비활성화
+
+        if (speedButton == null || attackButton == null || defenseButton == null)
+        {
+            Debug.LogError("버튼 중 하나를 찾지 못했습니다.");
+            return;
+        }
+
+        // 버튼 클릭 이벤트 설정
         speedButton.onClick.AddListener(() => UpgradePlayer("speed"));
         attackButton.onClick.AddListener(() => UpgradePlayer("attack"));
         defenseButton.onClick.AddListener(() => UpgradePlayer("defense"));
 
-        upgradeUI.SetActive(false); // 속성 선택 UI는 처음엔 비활성화
+        // 미션 타겟 생성
+        missionTarget = Instantiate(missionTargetPrefab);
+        missionTarget.SetActive(false); // 미션 시작 전까지 비활성화
     }
 
     private void Update()
@@ -34,12 +96,10 @@ public class SpecialQuest : MonoBehaviour
         if (!isMissionActive)
         {
             timer -= Time.deltaTime;
-            Debug.Log($"미션 대기 시간: {timer:F2}초 남음");
-
             if (timer <= 0f)
             {
                 Debug.Log("Player와 상호작용하지 않아 NPC가 파괴됩니다.");
-                Destroy(gameObject);  // 플레이어가 NPC와 상호작용하지 않으면 NPC 파괴
+                Destroy(gameObject);
             }
         }
     }
@@ -62,8 +122,7 @@ public class SpecialQuest : MonoBehaviour
         switch (currentMission)
         {
             case MissionType.FindObject:
-                Vector3 targetPosition = randomPositions[Random.Range(0, randomPositions.Length)].position;
-                missionTarget.transform.position = targetPosition;
+                missionTarget.transform.position = randomPositions[Random.Range(0, randomPositions.Length)].position;
                 missionTarget.SetActive(true);
                 Debug.Log("미션: 지정된 위치로 이동하여 오브젝트와 접촉하기");
 
@@ -104,22 +163,15 @@ public class SpecialQuest : MonoBehaviour
     private IEnumerator MissionTimer(float duration, System.Func<bool> successCondition)
     {
         float missionTimer = duration;
-        Debug.Log($"미션 타이머 시작: {duration}초");
-
         while (missionTimer > 0f)
         {
             missionTimer -= Time.deltaTime;
-            Debug.Log($"미션 진행 중... 남은 시간: {missionTimer:F2}초");
-
             if (successCondition.Invoke())
             {
-                Debug.Log("미션 성공 조건 충족");
                 yield break;
             }
-
             yield return null;
         }
-        Debug.Log("미션 시간 초과");
     }
 
     private bool MissionSuccess()
@@ -127,19 +179,11 @@ public class SpecialQuest : MonoBehaviour
         switch (currentMission)
         {
             case MissionType.FindObject:
-                bool foundObject = Vector3.Distance(player.transform.position, missionTarget.transform.position) < 1f;
-                Debug.Log(foundObject ? "오브젝트와 접촉 완료" : "오브젝트와 접촉 실패");
-                return foundObject;
+                return Vector3.Distance(player.transform.position, missionTarget.transform.position) < 1f;
 
             case MissionType.ReachMonster:
-                bool reachedMonster = GameObject.FindGameObjectsWithTag("Monster").Length == 0;
-                Debug.Log(reachedMonster ? "몬스터 접촉 완료" : "몬스터 접촉 실패");
-                return reachedMonster;
-
             case MissionType.KillMonsters:
-                bool killedAllMonsters = GameObject.FindGameObjectsWithTag("Monster").Length == 0;
-                Debug.Log(killedAllMonsters ? "모든 몬스터 처치 완료" : "모든 몬스터 처치 실패");
-                return killedAllMonsters;
+                return GameObject.FindGameObjectsWithTag("Monster").Length == 0;
 
             default:
                 return false;
@@ -148,24 +192,22 @@ public class SpecialQuest : MonoBehaviour
 
     private void UpgradePlayer(string attribute)
     {
-        Debug.Log($"{attribute} 속성을 선택했습니다.");
-
+        PlayerStats playerStats = player.GetComponent<PlayerStats>();
         switch (attribute)
         {
             case "speed":
-                player.GetComponent<PlayerStats>().strength += 1; //일단은 힘으로 할게
+                playerStats.strength += 1;
                 Debug.Log("Player 속도가 증가했습니다.");
                 break;
             case "attack":
-                player.GetComponent<PlayerStats>().strength += 1;
+                playerStats.strength += 1;
                 Debug.Log("Player 공격력이 증가했습니다.");
                 break;
             case "defense":
-                player.GetComponent<PlayerStats>().defense += 1;
+                playerStats.defense += 1;
                 Debug.Log("Player 방어력이 증가했습니다.");
                 break;
         }
-
         upgradeUI.SetActive(false);
     }
-}//근데 아마 플레이어랑 랜덤 위치 같은 경우는 직접 찾아서 넣어야하는 경우로 만들어야 할 것 같다.
+}

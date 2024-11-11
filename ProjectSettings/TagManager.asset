@@ -7,6 +7,8 @@ TagManager:
   - RespawnPoint
   - Monster
   - Weapon
+  - UpgradeUI
+  - RandomPosition
   layers:
   - Default
   - TransparentFX

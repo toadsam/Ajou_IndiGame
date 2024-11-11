@@ -14,6 +14,8 @@ public class WaveManager : MonoBehaviour
     private int monstersRemaining;
     private Queue<GameObject> monsterPool = new Queue<GameObject>();
 
+    public GameObject specialNPCPrefab; // SpecialNPC 프리팹
+
     private void Awake()
     {
         if (instance == null)
@@ -55,12 +57,13 @@ public class WaveManager : MonoBehaviour
         switch (currentWave)
         {
             case 1:
-                monstersRemaining = 30;
+                monstersRemaining = 1;
                 SpawnMonsters(firstWaveMonsterPrefab, monstersRemaining);
                 Debug.Log("첫 번째 웨이브 시작 - 남은 몬스터: " + monstersRemaining);
                 break;
             case 2:
-                monstersRemaining = 10;
+                SpawnSpecialNPC();
+                monstersRemaining = 2;
                 SpawnMonsters(secondWaveMonsterPrefab, monstersRemaining);
                 Debug.Log("두 번째 웨이브 시작 - 남은 몬스터: " + monstersRemaining);
                 break;
@@ -80,6 +83,14 @@ public class WaveManager : MonoBehaviour
             GameObject monster = Instantiate(monsterPrefab, spawnPoint.position, Quaternion.identity);
             monsterPool.Enqueue(monster);
         }
+    }
+
+
+    private void SpawnSpecialNPC()
+    {
+        Transform spawnPoint = respawnPoints[Random.Range(0, respawnPoints.Length)];
+        Instantiate(specialNPCPrefab, spawnPoint.position, Quaternion.identity);
+        Debug.Log("SpecialNPC가 소환되었습니다.");
     }
 
     private void CheckMonstersRemaining()
