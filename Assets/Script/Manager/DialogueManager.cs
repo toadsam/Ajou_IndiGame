@@ -16,9 +16,9 @@ public class DialogueManager : MonoBehaviour
     public Button confirmButton;
 
     private string[] startGameDialogue = {
-        "Welcome to the game!",
-        "Explore the world and interact with portals.",
-        "Each portal will take you to a new location."
+        "아주 대탐험에 오신 것을 환영합니다!!",
+        "재훈재훈과 함께 모험을 떠나볼까요??",
+        "우선 원천관으로~~!!"
     };
 
     private Dictionary<string, string[]> portalDialogues = new Dictionary<string, string[]>();
@@ -70,9 +70,9 @@ public class DialogueManager : MonoBehaviour
             "Would you like to proceed?"
         };
         portalDialogues["WoncheonHallPortal"] = new string[] {
-            "Welcome to Woncheon Hall.",
-            "This hall has a mysterious atmosphere.",
-            "Are you ready to enter?"
+            "이곳은 많은 학생들이 실험으로 고통받는 곳 입니다.....",
+            "이곳에 가면 실험으로 인해 변질된 몬스터,,,,마지막에는 실험으로 인해 타락한 대학생을 볼 수 있어요....",
+            "들어가서 구할 준비가 되었을까요???"
         };
     }
 

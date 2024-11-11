@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,6 +12,7 @@ public class WaveManager : MonoBehaviour
     public GameObject fourthWaveMonsterPrefab;
     public GameObject bossPrefab;
     public Transform[] respawnPoints;
+    public GameObject bossWavePanel; // 보스 웨이브 패널
 
     private int currentWave = 1;
     private int monstersRemaining;
@@ -59,29 +61,30 @@ public class WaveManager : MonoBehaviour
         switch (currentWave)
         {
             case 1:
-                monstersRemaining = 5;
+                monstersRemaining = 1;
                 SpawnMonsters(firstWaveMonsterPrefab, monstersRemaining);
                 Debug.Log("첫 번째 웨이브 시작 - 남은 몬스터: " + monstersRemaining);
                 break;
             case 2:
                 SpawnSpecialNPC();
-                monstersRemaining = 5;
+                monstersRemaining = 1;
                 SpawnMonsters(secondWaveMonsterPrefab, monstersRemaining);
                 Debug.Log("두 번째 웨이브 시작 - 남은 몬스터: " + monstersRemaining);
                 break;
             case 3:
                 SpawnSpecialNPC();
-                monstersRemaining = 5;
+                monstersRemaining = 1;
                 SpawnMonsters(thirdWaveMonsterPrefab, monstersRemaining);
                 Debug.Log("세 번째 웨이브 시작 - 남은 몬스터: " + monstersRemaining);
                 break;
             case 4:
                 SpawnSpecialNPC();
-                monstersRemaining = 5;
+                monstersRemaining = 1;
                 SpawnMonsters(fourthWaveMonsterPrefab, monstersRemaining);
                 Debug.Log("네 번째 웨이브 시작 - 남은 몬스터: " + monstersRemaining);
                 break;
             case 5:
+                StartCoroutine(ShowBossWavePanel());
                 monstersRemaining = 1;
                 SpawnMonsters(bossPrefab, monstersRemaining);
                 Debug.Log("보스 웨이브 시작 - 남은 몬스터: " + monstersRemaining);
@@ -144,6 +147,21 @@ public class WaveManager : MonoBehaviour
             {
                 Debug.Log("모든 웨이브 완료!");
             }
+        }
+    }
+
+
+    private IEnumerator ShowBossWavePanel()
+    {
+        if (bossWavePanel != null)
+        {
+            bossWavePanel.SetActive(true);
+            yield return new WaitForSeconds(3f);
+            bossWavePanel.SetActive(false);
+        }
+        else
+        {
+            Debug.LogWarning("bossWavePanel이 할당되지 않았습니다.");
         }
     }
 }
