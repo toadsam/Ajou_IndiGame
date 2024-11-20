@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 3927345668033502345}
   - component: {fileID: 2621467453417969704}
   - component: {fileID: 5506376189973832936}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: "\uC6D0\uCC9C\uAD00 \uC7A1\uBAB8"
   m_TagString: Monster
   m_Icon: {fileID: 0}
@@ -178,7 +178,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3496765455104671324}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: tail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -210,7 +210,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8186151459927811}
   - component: {fileID: 5009508230465924865}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Whispa_C
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -297,7 +297,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 320407841613552953}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: root
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -329,7 +329,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5652339999220217589}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -360,7 +360,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1357457104715196093}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: center
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -392,6 +392,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1813352190504369461}
     m_Modifications:
+    - target: {fileID: 272526040534794905, guid: 7d9a67a9fb3a23940935eeda3ce2f3a5, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 1935987059840007520, guid: 7d9a67a9fb3a23940935eeda3ce2f3a5, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2256857502275718480, guid: 7d9a67a9fb3a23940935eeda3ce2f3a5, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 2824245121069826066, guid: 7d9a67a9fb3a23940935eeda3ce2f3a5, type: 3}
       propertyPath: m_SizeDelta.x
       value: 3
@@ -407,6 +419,10 @@ PrefabInstance:
     - target: {fileID: 2824245121069826066, guid: 7d9a67a9fb3a23940935eeda3ce2f3a5, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3875422177871285672, guid: 7d9a67a9fb3a23940935eeda3ce2f3a5, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 5063623425700288590, guid: 7d9a67a9fb3a23940935eeda3ce2f3a5, type: 3}
       propertyPath: m_Pivot.x

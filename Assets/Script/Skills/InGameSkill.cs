@@ -9,6 +9,8 @@ public class InGameSkill : MonoBehaviour
         ParticleEffect // 파티클 생성 및 크기 변경
     }
 
+    public int damageAmount = 10; // 파티클 데미지
+
     [Header("Skill Information")]
     public string skillName;         // 스킬 이름
     public string skillDescription;  // 스킬 설명
@@ -163,5 +165,26 @@ public class InGameSkill : MonoBehaviour
         isParticleActive = false;
         CancelInvoke(nameof(SpawnObjectAroundPlayer));
         CancelInvoke(nameof(SpawnParticleAroundPlayer));
+    }
+
+    private void OnParticleCollision(GameObject other)
+    {
+        if (isParticleActive && other.CompareTag("Monster"))
+        {
+            MonsterStats monsterStats = other.GetComponent<MonsterStats>();
+            if (monsterStats != null)
+            {
+                monsterStats.TakeDamage(damageAmount);
+                Debug.Log($"{other.name}에게 {damageAmount}의 데미지를 입혔습니다. OnParticleCollision 발생");
+            }
+            else
+            {
+                Debug.LogWarning($"{other.name}에 MonsterStats가 없습니다.");
+            }
+        }
+        else
+        {
+            Debug.Log("OnParticleCollision이 발생하지 않음. 파티클 활성 상태: " + isParticleActive);
+        }
     }
 }

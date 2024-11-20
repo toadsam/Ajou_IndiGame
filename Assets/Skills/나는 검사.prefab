@@ -46,15 +46,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca87027baa6dc4149a20c49b226327af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damageAmount: 10
   skillName: SWORD
   skillDescription: "\uB098\uB294 \uC544\uC8FC\uB300\uD559\uAD50\uC758 \uCD5C\uACE0
     \uAC80\uAC1D\uC774\uB2E4"
   skillIcon: {fileID: 21300000, guid: 89ee8c9ef8e2a470582f0df5e8f7f97a, type: 3}
+  skillType: 0
   skillObject: {fileID: 81165085937083329}
   stage1Effect: {fileID: 0}
   stage2Effect: {fileID: 0}
   stage3Effect: {fileID: 0}
   stage4Effect: {fileID: 0}
+  spawnObject: {fileID: 0}
+  spawnInterval: 10
+  particlePrefab: {fileID: 0}
+  particleSizes:
+  - 0.5
+  - 1
+  - 1.5
+  - 2
+  particleInterval: 3
 --- !u!1 &318853036027742946
 GameObject:
   m_ObjectHideFlags: 0
@@ -3786,7 +3797,7 @@ ParticleSystem:
         m_NumAlphaKeys: 2
     range: {x: 0, y: 1}
   CollisionModule:
-    enabled: 0
+    enabled: 1
     serializedVersion: 4
     type: 1
     collisionMode: 0
@@ -13770,7 +13781,7 @@ ParticleSystem:
         m_NumAlphaKeys: 2
     range: {x: 0, y: 1}
   CollisionModule:
-    enabled: 0
+    enabled: 1
     serializedVersion: 4
     type: 1
     collisionMode: 0
@@ -13949,11 +13960,11 @@ ParticleSystem:
     radiusScale: 0.33
     collidesWith:
       serializedVersion: 2
-      m_Bits: 16
+      m_Bits: 64
     maxCollisionShapes: 256
     quality: 0
     voxelSize: 0.5
-    collisionMessages: 0
+    collisionMessages: 1
     collidesWithDynamic: 1
     interiorCollisions: 0
   TriggerModule:
@@ -18688,9 +18699,9 @@ ParticleSystem:
         m_NumAlphaKeys: 2
     range: {x: 0, y: 1}
   CollisionModule:
-    enabled: 0
+    enabled: 1
     serializedVersion: 4
-    type: 0
+    type: 1
     collisionMode: 0
     colliderForce: 0
     multiplyColliderForceByParticleSize: 0
@@ -18867,11 +18878,11 @@ ParticleSystem:
     radiusScale: 0.5
     collidesWith:
       serializedVersion: 2
-      m_Bits: 4294967295
+      m_Bits: 64
     maxCollisionShapes: 256
     quality: 0
     voxelSize: 0.5
-    collisionMessages: 0
+    collisionMessages: 1
     collidesWithDynamic: 1
     interiorCollisions: 0
   TriggerModule:
