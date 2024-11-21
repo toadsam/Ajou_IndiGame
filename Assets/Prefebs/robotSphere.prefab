@@ -4310,6 +4310,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 198103793226961838, guid: 990bf98ec179b3e4b8304aa2958b1e2c, type: 3}
+      propertyPath: CollisionModule.type
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 198103793226961838, guid: 990bf98ec179b3e4b8304aa2958b1e2c, type: 3}
+      propertyPath: CollisionModule.enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 198103793226961838, guid: 990bf98ec179b3e4b8304aa2958b1e2c, type: 3}
+      propertyPath: CollisionModule.collisionMessages
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 198103793226961838, guid: 990bf98ec179b3e4b8304aa2958b1e2c, type: 3}
+      propertyPath: CollisionModule.collidesWith.m_Bits
+      value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 198103793226961838, guid: 990bf98ec179b3e4b8304aa2958b1e2c, type: 3}
+      propertyPath: CollisionModule.multiplyColliderForceByParticleSize
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 198103793226961838, guid: 990bf98ec179b3e4b8304aa2958b1e2c, type: 3}
+      propertyPath: CollisionModule.multiplyColliderForceByParticleSpeed
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 198829629001249430, guid: 990bf98ec179b3e4b8304aa2958b1e2c, type: 3}
       propertyPath: CollisionModule.type
       value: 1
@@ -4389,7 +4413,29 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1178844608527456, guid: 990bf98ec179b3e4b8304aa2958b1e2c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8740498714916954175}
+    - targetCorrespondingSourceObject: {fileID: 1602207088211346, guid: 990bf98ec179b3e4b8304aa2958b1e2c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6200948566206320188}
   m_SourcePrefab: {fileID: 100100000, guid: 990bf98ec179b3e4b8304aa2958b1e2c, type: 3}
+--- !u!1 &8121256372572072187 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1602207088211346, guid: 990bf98ec179b3e4b8304aa2958b1e2c, type: 3}
+  m_PrefabInstance: {fileID: 8120498748533005673}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6200948566206320188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8121256372572072187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94361a05be977dc4cb9a5df30c582e6f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damageAmount: 200
+  particleSystem: {fileID: 8218507262388539079}
 --- !u!1 &8121677540528136457 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1178844608527456, guid: 990bf98ec179b3e4b8304aa2958b1e2c, type: 3}
@@ -4411,6 +4457,11 @@ MonoBehaviour:
 --- !u!4 &8124178770262375425 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4273914776805736, guid: 990bf98ec179b3e4b8304aa2958b1e2c, type: 3}
+  m_PrefabInstance: {fileID: 8120498748533005673}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &8218507262388539079 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 198103793226961838, guid: 990bf98ec179b3e4b8304aa2958b1e2c, type: 3}
   m_PrefabInstance: {fileID: 8120498748533005673}
   m_PrefabAsset: {fileID: 0}
 --- !u!198 &8247125455449190399 stripped
