@@ -5,13 +5,13 @@ using UnityEngine.UI;
 public class SpecialQuest : MonoBehaviour
 {
     public GameObject missionTargetPrefab;        // 미션 타겟 프리팹
-    public GameObject monsterPrefab;              // 몬스터 프리팹
+    public GameObject monsterPrefab;             // 몬스터 프리팹
 
-    private GameObject player;                    // Player 오브젝트
-    private GameObject missionTarget;             // 미션 타겟 인스턴스
-    private GameObject upgradeUI;                 // 속성 선택 UI 인스턴스
+    private GameObject player;                   // Player 오브젝트
+    private GameObject missionTarget;            // 미션 타겟 인스턴스
+    private GameObject upgradeUI;                // 속성 선택 UI 인스턴스
     private Button speedButton, attackButton, defenseButton;
-    private Transform[] randomPositions;          // 랜덤 위치 배열
+    private Transform[] randomPositions;         // 랜덤 위치 배열
 
     private bool isMissionActive = false;
     private float timer = 30f;
@@ -29,7 +29,7 @@ public class SpecialQuest : MonoBehaviour
             return;
         }
 
-        // randomPositions을 특정 태그로 할당
+        // 랜덤 위치 배열 초기화
         GameObject randomPositionParent = GameObject.FindGameObjectWithTag("RandomPosition");
         if (randomPositionParent != null)
         {
@@ -46,7 +46,7 @@ public class SpecialQuest : MonoBehaviour
             return;
         }
 
-        // upgradeUI를 태그로 찾기
+        // Upgrade UI 찾기
         upgradeUI = GameObject.FindGameObjectWithTag("UpgradeUI");
         if (upgradeUI == null)
         {
@@ -68,11 +68,6 @@ public class SpecialQuest : MonoBehaviour
         attackButton = panel.Find("AttackButton")?.GetComponent<Button>();
         defenseButton = panel.Find("DefenseButton")?.GetComponent<Button>();
 
-        // 각 버튼이 제대로 할당되었는지 확인하는 디버그 메시지
-        Debug.Log($"Speed Button 할당: {speedButton != null}");
-        Debug.Log($"Attack Button 할당: {attackButton != null}");
-        Debug.Log($"Defense Button 할당: {defenseButton != null}");
-
         upgradeUI.SetActive(false); // 다시 비활성화
 
         if (speedButton == null || attackButton == null || defenseButton == null)
@@ -93,6 +88,19 @@ public class SpecialQuest : MonoBehaviour
 
     private void Update()
     {
+        // UI 활성화 동안 마우스 커서 표시
+        if (upgradeUI != null && upgradeUI.activeSelf)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+
+        // NPC가 일정 시간 동안 상호작용이 없으면 제거
         if (!isMissionActive)
         {
             timer -= Time.deltaTime;
@@ -126,16 +134,61 @@ public class SpecialQuest : MonoBehaviour
                 missionTarget.SetActive(true);
                 Debug.Log("미션: 지정된 위치로 이동하여 오브젝트와 접촉하기");
 
-                yield return StartCoroutine(MissionTimer(10f, () => Vector3.Distance(player.transform.position, missionTarget.transform.position) < 1f));
+                yield return StartCoroutine(MissionTimer(10f, () =>
+                    Vector3.Distance(player.transform.position, missionTarget.transform.position) < 1f
+                ));
                 missionTarget.SetActive(false);
                 break;
 
             case MissionType.ReachMonster:
                 GameObject monster = Instantiate(monsterPrefab, randomPositions[Random.Range(0, randomPositions.Length)].position, Quaternion.identity);
+                monster.tag = "Monster"; // 몬스터 태그 설정
                 Debug.Log("미션: 소환된 몬스터와 12초 내에 접촉하기");
 
-                yield return StartCoroutine(MissionTimer(12f, () => Vector3.Distance(player.transform.position, monster.transform.position) < 1f));
-                Destroy(monster);
+                if (monster.GetComponent<Collider>() == null)
+                {
+                    monster.AddComponent<BoxCollider>(); // Collider 추가
+                    Debug.Log("BoxCollider가 몬스터에 추가되었습니다.");
+                }
+
+                // MissionTimer 호출
+                yield return StartCoroutine(MissionTimer(12f, () =>
+                {
+                    if (monster == null) return false; // 몬스터가 이미 파괴된 경우
+                    float distance = Vector3.Distance(player.transform.position, monster.transform.position);
+                    Debug.Log($"플레이어와 몬스터의 거리: {distance}");
+                    return distance < 1f; // 거리 조건
+                }));
+
+                // 몬스터 제거 및 후속 처리
+                if (monster != null)
+                {
+                    Destroy(monster);
+                    Debug.Log("몬스터 제거 완료");
+                }
+
+                // 미션 성공 후 처리
+                if (MissionSuccess())
+                {
+                    Debug.Log("미션 성공: 소환된 몬스터와 접촉 성공");
+
+                    // UI 활성화
+                    GameObject panel = upgradeUI.transform.Find("Panel")?.gameObject;
+                    if (panel != null)
+                    {
+                        panel.SetActive(true);
+                        upgradeUI.SetActive(true); // UI 활성화
+                        Debug.Log("업그레이드 UI 활성화 완료");
+                    }
+                    else
+                    {
+                        Debug.LogError("Panel 오브젝트를 찾을 수 없습니다.");
+                    }
+                }
+                else
+                {
+                    Debug.Log("미션 실패!");
+                }
                 break;
 
             case MissionType.KillMonsters:
@@ -145,18 +198,26 @@ public class SpecialQuest : MonoBehaviour
                     Instantiate(monsterPrefab, randomPositions[Random.Range(0, randomPositions.Length)].position, Quaternion.identity);
                 }
 
-                yield return StartCoroutine(MissionTimer(20f, () => GameObject.FindGameObjectsWithTag("Monster").Length == 0));
+                yield return StartCoroutine(MissionTimer(20f, () =>
+                    GameObject.FindGameObjectsWithTag("Monster").Length == 0
+                ));
                 break;
         }
 
         if (MissionSuccess())
         {
             Debug.Log("미션 성공! 보상 선택 UI를 표시합니다.");
-            upgradeUI.SetActive(true);
-        }
-        else
-        {
-            Debug.Log("미션 실패!");
+
+            GameObject panel = upgradeUI.transform.Find("Panel")?.gameObject;
+            if (panel != null)
+            {
+                panel.SetActive(true);
+                upgradeUI.SetActive(true);
+            }
+            else
+            {
+                Debug.LogError("Panel 오브젝트를 찾을 수 없습니다.");
+            }
         }
     }
 
@@ -196,18 +257,18 @@ public class SpecialQuest : MonoBehaviour
         switch (attribute)
         {
             case "speed":
-                playerStats.strength += 1;
+                playerStats.strength += 1; // 속도 증가
                 Debug.Log("Player 속도가 증가했습니다.");
                 break;
             case "attack":
-                playerStats.strength += 1;
+                playerStats.strength += 1; // 공격력 증가
                 Debug.Log("Player 공격력이 증가했습니다.");
                 break;
             case "defense":
-                playerStats.defense += 1;
+                playerStats.defense += 1; // 방어력 증가
                 Debug.Log("Player 방어력이 증가했습니다.");
                 break;
         }
-        upgradeUI.SetActive(false);
+        upgradeUI.SetActive(false); // UI 비활성화
     }
 }
