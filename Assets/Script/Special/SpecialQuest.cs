@@ -56,26 +56,23 @@ public class SpecialQuest : MonoBehaviour
 
         upgradeUI.SetActive(true); // 임시 활성화
 
-        // Panel 내부에서 버튼 찾기
-        Transform panel = upgradeUI.transform.Find("Panel");
-        if (panel == null)
+        Transform buttonsParent = upgradeUI.transform.Find("Panel/Buttons"); // Buttons 오브젝트 찾기
+        if (buttonsParent == null)
         {
-            Debug.LogError("Panel 오브젝트를 찾을 수 없습니다.");
+            Debug.LogError("Buttons 오브젝트를 찾을 수 없습니다.");
             return;
         }
 
-        speedButton = panel.Find("SpeedButton")?.GetComponent<Button>();
-        attackButton = panel.Find("AttackButton")?.GetComponent<Button>();
-        defenseButton = panel.Find("DefenseButton")?.GetComponent<Button>();
-
-        upgradeUI.SetActive(false); // 다시 비활성화
+        // Buttons 오브젝트 내부에서 각 버튼을 찾음
+        speedButton = buttonsParent.Find("SpeedButton")?.GetComponent<Button>();
+        attackButton = buttonsParent.Find("AttackButton")?.GetComponent<Button>();
+        defenseButton = buttonsParent.Find("DefenseButton")?.GetComponent<Button>();
 
         if (speedButton == null || attackButton == null || defenseButton == null)
         {
-            Debug.LogError("버튼 중 하나를 찾지 못했습니다.");
+            Debug.LogError("SpeedButton, AttackButton 또는 DefenseButton 중 하나를 찾을 수 없습니다.");
             return;
         }
-
         // 버튼 클릭 이벤트 설정
         speedButton.onClick.AddListener(() => UpgradePlayer("speed"));
         attackButton.onClick.AddListener(() => UpgradePlayer("attack"));
@@ -88,16 +85,17 @@ public class SpecialQuest : MonoBehaviour
 
     private void Update()
     {
-        // UI 활성화 동안 마우스 커서 표시
-        if (upgradeUI != null && upgradeUI.activeSelf)
+        // Panel이 활성화되어 있는 동안에만 마우스 커서 표시
+        Transform panel = upgradeUI?.transform.Find("Panel");
+        if (panel != null && panel.gameObject.activeSelf)
         {
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None; // 마우스 잠금 해제
+            Cursor.visible = true;                 // 마우스 커서 표시
         }
         else
         {
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked; // 마우스 잠금
+            Cursor.visible = false;                  // 마우스 커서 숨기기
         }
 
         // NPC가 일정 시간 동안 상호작용이 없으면 제거
@@ -176,8 +174,8 @@ public class SpecialQuest : MonoBehaviour
                     GameObject panel = upgradeUI.transform.Find("Panel")?.gameObject;
                     if (panel != null)
                     {
-                        panel.SetActive(true);
-                        upgradeUI.SetActive(true); // UI 활성화
+                        panel.SetActive(true);           // Panel 활성화
+                        upgradeUI.SetActive(true);       // Upgrade UI 활성화
                         Debug.Log("업그레이드 UI 활성화 완료");
                     }
                     else
@@ -191,9 +189,10 @@ public class SpecialQuest : MonoBehaviour
                 }
                 break;
 
+
             case MissionType.KillMonsters:
-                Debug.Log("미션: 20초 내에 소환된 몬스터 20마리 처치하기");
-                for (int i = 0; i < 20; i++)
+                Debug.Log("미션: 20초 내에 소환된 몬스터 5마리 처치하기");
+                for (int i = 0; i < 5; i++)
                 {
                     Instantiate(monsterPrefab, randomPositions[Random.Range(0, randomPositions.Length)].position, Quaternion.identity);
                 }

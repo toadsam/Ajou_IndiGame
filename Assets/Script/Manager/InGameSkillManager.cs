@@ -24,6 +24,21 @@ public class InGameSkillManager : MonoBehaviour
             Destroy(gameObject);
     }
 
+    private void Update()
+    {
+        // UI가 활성화되어 있으면 마우스 커서를 표시
+        if (skillSelectionUI != null && skillSelectionUI.activeSelf)
+        {
+            Cursor.lockState = CursorLockMode.None; // 마우스 잠금 해제
+            Cursor.visible = true;                 // 마우스 커서 표시
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked; // 마우스 잠금
+            Cursor.visible = false;                  // 마우스 커서 숨기기
+        }
+    }
+
     public void LevelUp()
     {
         DisplaySkillSelection();
@@ -68,7 +83,7 @@ public class InGameSkillManager : MonoBehaviour
         skillSelectionUI.SetActive(false);
 
         // 마우스 잠금 복원
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+      ///  Cursor.lockState = CursorLockMode.Locked;
+      //  Cursor.visible = false;
     }
 }
