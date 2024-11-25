@@ -119,29 +119,13 @@ public class InventoryManager : MonoBehaviour
         {
             targetItem.gameObject.SetActive(true);
             Debug.Log($"{selectedItem.itemName} 장착되었습니다!");
+
+            // PlayerController의 ChangeWeapon 호출
+            PlayerController.instance.ChangeWeapon(selectedItem.itemName);
         }
         else
         {
             Debug.LogError($"'{selectedItem.itemName}' 아이템을 찾을 수 없습니다. 장착 실패.");
-            return;
-        }
-
-        // 인벤토리 UI 업데이트: "장착 중" 표시
-        foreach (Transform child in inventoryListParent)
-        {
-            var slotText = child.GetComponentInChildren<TextMeshProUGUI>();
-            if (slotText != null)
-            {
-                // "장착 중" 상태 업데이트
-                if (slotText.text.StartsWith(selectedItem.itemName))
-                {
-                    slotText.text = $"{selectedItem.itemName} (장착 중)";
-                }
-                else if (slotText.text.EndsWith("(장착 중)"))
-                {
-                    slotText.text = slotText.text.Replace(" (장착 중)", ""); // 기존 장착 중 상태 제거
-                }
-            }
         }
 
         // 상세 정보 UI 닫기

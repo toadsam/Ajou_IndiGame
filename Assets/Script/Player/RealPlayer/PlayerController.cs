@@ -41,6 +41,7 @@ public class PlayerController : MonoBehaviour
     [Header("Attack")]
     public Collider attackCollider; // 공격 범위로 사용할 Trigger Collider
     public bool isAttacking = false; // 공격 중인지 여부
+    public Transform equipmentParent; // 장착된 무기 부모
 
     public static PlayerController instance;
     private void Awake()
@@ -271,6 +272,35 @@ public class PlayerController : MonoBehaviour
                 Debug.Log("Dealt " + attackDamage + " damage to the monster.");
             }
         }
+    }
+
+    public void ChangeWeapon(string weaponName)
+    {
+        // 장착된 무기 검색
+        Transform weaponTransform = equipmentParent.transform.Find(weaponName);
+        if (weaponTransform == null)
+        {
+            Debug.LogError($"Weapon '{weaponName}' not found!");
+            return;
+        }
+
+        // 무기의 콜라이더 가져오기
+        Collider newCollider = weaponTransform.GetComponent<Collider>();
+        if (newCollider == null)
+        {
+            Debug.LogError($"Weapon '{weaponName}' does not have a Collider!");
+            return;
+        }
+
+        // 기존 콜라이더 비활성화
+        if (attackCollider != null)
+        {
+            attackCollider.enabled = false;
+        }
+
+        // 새로운 콜라이더 설정
+        attackCollider = newCollider;
+        Debug.Log($"Weapon changed to '{weaponName}'. Collider updated.");
     }
 
 }
