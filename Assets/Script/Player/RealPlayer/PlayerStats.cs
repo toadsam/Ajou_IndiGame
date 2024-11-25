@@ -24,6 +24,9 @@ public class PlayerStats : MonoBehaviour
     public int experience = 0;
     public int experienceToNextLevel = 100;
 
+    [Header("Currency")]
+    public int gold = 500; // 플레이어의 초기 재화
+
     private void Awake()
     {
         if (instance == null)
@@ -108,5 +111,25 @@ public class PlayerStats : MonoBehaviour
     private void Die()
     {
         Debug.Log("Player has died.");
+    }
+
+    // 재화 소비 메서드
+    public bool SpendGold(int amount)
+    {
+        if (gold >= amount)
+        {
+            gold -= amount;
+            Debug.Log($"재화 {amount} 사용. 남은 재화: {gold}");
+            return true;
+        }
+        Debug.Log("재화가 부족합니다.");
+        return false;
+    }
+
+    // 재화 획득 메서드
+    public void AddGold(int amount)
+    {
+        gold += amount;
+        Debug.Log($"재화 {amount} 획득. 총 재화: {gold}");
     }
 }

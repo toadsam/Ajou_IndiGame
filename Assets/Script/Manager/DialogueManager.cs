@@ -46,7 +46,7 @@ public class DialogueManager : MonoBehaviour
 
     private void Update()
     {
-        if (dialogueUIPanel.activeSelf)
+        if (dialogueUIPanel.activeSelf || StoreManager.isActicve || InventoryManager.isInventoryActive)
         {
             // 마우스가 UI와 상호작용할 수 있도록 잠금 해제
             Cursor.lockState = CursorLockMode.None;
