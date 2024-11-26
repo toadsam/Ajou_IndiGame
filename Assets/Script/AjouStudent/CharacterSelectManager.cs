@@ -55,6 +55,11 @@ public class CharacterSelectManager : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            Toggle();
+        }
+
         // Store UI가 활성화된 동안 마우스 커서를 활성화
         if (characterSelectUI != null && characterSelectUI.activeSelf)
         {
@@ -156,5 +161,9 @@ public class CharacterSelectManager : MonoBehaviour
         characterDetailPanel.SetActive(false);
     }
 
-
+    public void Toggle()
+    {
+        bool isActive = characterSelectUI.activeSelf;
+        characterSelectUI.SetActive(!isActive); // 인벤토리 UI 열기/닫기
+    }
 }

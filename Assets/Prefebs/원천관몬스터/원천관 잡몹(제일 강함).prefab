@@ -168,7 +168,7 @@ MonoBehaviour:
   maxHealth: 100
   currentHealth: 100
   healthSlider: {fileID: 6613395777376131459}
-  experienceReward: 50
+  experienceReward: 5
 --- !u!1 &1617142839717091524
 GameObject:
   m_ObjectHideFlags: 0

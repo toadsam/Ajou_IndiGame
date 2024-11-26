@@ -1546,7 +1546,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 320378beded754b46999613740acca94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 2000
   currentHealth: 1
   healthSlider: {fileID: 6338580831812311950}
   experienceReward: 50
