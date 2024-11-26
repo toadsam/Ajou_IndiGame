@@ -6,6 +6,11 @@ public class SupportCharacterAI : MonoBehaviour
     public enum AIState { Idle, Follow, Attack }
     private AIState currentState;
 
+    [Header("Attack Effects")]
+    public GameObject attackParticlePrefab; // 공격 시 실행할 파티클 프리팹
+    //public Transform attackParticleSpawnPoint; // 파티클 생성 위치
+
+
     [Header("References")]
     public Transform player;           // 플레이어를 따라감
     public Animator animator;          // 캐릭터 애니메이터
@@ -92,12 +97,27 @@ public class SupportCharacterAI : MonoBehaviour
         }
     }
 
+
     private IEnumerator AttackCoroutine()
     {
         canAttack = false;
 
         // 공격 애니메이션 재생
         animator.SetTrigger("attack");
+
+        // 파티클 효과 실행 (랜덤 위치)
+        if (attackParticlePrefab != null)
+        {
+            Vector3 randomOffset = new Vector3(
+                Random.Range(-1f, 1f), // X축 랜덤 오프셋
+                Random.Range(0.5f, 1.5f), // Y축 랜덤 오프셋
+                Random.Range(-1f, 1f) // Z축 랜덤 오프셋
+            );
+
+            Vector3 spawnPosition = transform.position + randomOffset;
+            GameObject particle = Instantiate(attackParticlePrefab, spawnPosition, Quaternion.identity);
+            Destroy(particle, 2f); // 파티클을 2초 후에 제거
+        }
 
         // 실제 공격 로직
         if (attackTarget != null && Vector3.Distance(transform.position, attackTarget.position) <= attackRange)
@@ -110,9 +130,11 @@ public class SupportCharacterAI : MonoBehaviour
             }
         }
 
-        yield return new WaitForSeconds(attackCooldown);
+        yield return new WaitForSeconds(attackCooldown); // 공격 대기시간
         canAttack = true;
     }
+
+
 
     private void UpdateState()
     {
