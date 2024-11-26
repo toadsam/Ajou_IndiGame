@@ -120,7 +120,7 @@ public class SupportCharacterAI : MonoBehaviour
         }
 
         // 실제 공격 로직
-        if (attackTarget != null && Vector3.Distance(transform.position, attackTarget.position) <= attackRange)
+       /* if (attackTarget != null && Vector3.Distance(transform.position, attackTarget.position) <= attackRange)
         {
             Debug.Log($"{gameObject.name} attacks {attackTarget.name}");
             MonsterStats monster = attackTarget.GetComponent<MonsterStats>();
@@ -128,7 +128,7 @@ public class SupportCharacterAI : MonoBehaviour
             {
                 monster.TakeDamage(10); // 데미지 처리
             }
-        }
+        }*/
 
         yield return new WaitForSeconds(attackCooldown); // 공격 대기시간
         canAttack = true;

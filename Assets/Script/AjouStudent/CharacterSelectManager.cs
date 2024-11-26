@@ -123,23 +123,34 @@ public class CharacterSelectManager : MonoBehaviour
             child.gameObject.SetActive(false);
         }
 
-        if (activeCharacter == null)
-        {
-            Debug.Log("ActiveCharacter가 설정되지 않았습니다. 초기 상태로 처리합니다.");
-            return; // 선택된 캐릭터가 없으면 아무것도 활성화하지 않고 종료
-        }
+        Transform selectedChild;
 
-        // 선택된 캐릭터 이름과 동일한 자식 활성화
-        Transform selectedChild = charactersParent.Find(activeCharacter.characterName);
-        if (selectedChild != null)
+        if (selectedCharacter == null)
         {
-            selectedChild.gameObject.SetActive(true);
-            Debug.Log($"{activeCharacter.characterName} 캐릭터가 활성화되었습니다.");
+            Debug.Log("선택된 캐릭터가 없습니다. '없지롱' 오브젝트를 활성화합니다.");
+            selectedChild = charactersParent.Find("없지롱"); // "없지롱" 오브젝트 찾기
+            if (selectedChild == null)
+            {
+                Debug.LogError("'없지롱' 오브젝트를 Characters Parent에서 찾을 수 없습니다.");
+                return;
+            }
         }
         else
         {
-            Debug.LogError($"'{activeCharacter.characterName}' 캐릭터를 Characters Parent에서 찾을 수 없습니다.");
+            // 선택된 캐릭터 이름과 동일한 자식 활성화
+            selectedChild = charactersParent.Find(selectedCharacter.characterName);
+            if (selectedChild == null)
+            {
+                Debug.LogError($"'{selectedCharacter.characterName}' 캐릭터를 Characters Parent에서 찾을 수 없습니다.");
+                return;
+            }
         }
+
+        selectedChild.gameObject.SetActive(true);
+        Debug.Log($"{selectedChild.name} 캐릭터가 활성화되었습니다.");
+
+        // 활성화된 캐릭터를 activeCharacter로 설정
+        activeCharacter = selectedCharacter;
 
         // 상세 정보 패널 닫기
         characterDetailPanel.SetActive(false);
