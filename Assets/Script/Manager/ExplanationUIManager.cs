@@ -34,7 +34,7 @@ public class TutorialUIManager : MonoBehaviour
     private void Update()
     {
         // 튜토리얼 패널이 활성화된 동안에는 항상 커서가 보이도록 설정
-        if (tutorialUIPanel.activeSelf || StoreManager.isActicve)
+        if (tutorialUIPanel.activeSelf || StoreManager.isActive)
         {
             Cursor.lockState = CursorLockMode.None;   // 마우스 잠금 해제
             Cursor.visible = true;                    // 마우스 커서 보이기

@@ -11,41 +11,40 @@ public class StoreManager : MonoBehaviour
     public GameObject storeUI;         // 상점 UI
     public Transform itemListParent;  // 아이템 목록 부모 객체
     public GameObject itemSlotPrefab; // 아이템 슬롯 프리팹
-    public TextMeshProUGUI selectedItemName;     // 선택된 아이템 이름
-    public TextMeshProUGUI selectedItemDescription; // 선택된 아이템 설명
-    public TextMeshProUGUI selectedItemPrice;    // 선택된 아이템 가격
-    public Button buyButton;          // 구매 버튼
-
-    public static bool isActicve; 
 
     [Header("Store Items")]
     public List<SchoolItem> storeItems = new List<SchoolItem>(); // 상점에서 판매할 아이템 목록
 
-    private SchoolItem selectedItem; // 현재 선택된 아이템
+    public static bool isActive = false; // 상점 활성화 상태 (static)
 
     private void Awake()
     {
         if (instance == null) instance = this;
         else Destroy(gameObject);
-        isActicve = false;
     }
 
     private void Start()
     {
         InitializeStore();
         storeUI.SetActive(false); // 초기에는 상점 UI 비활성화
+        isActive = false; // 초기 상태
     }
 
-    private void Update()
+    private void OnTriggerEnter(Collider other)
     {
-        // Store UI가 활성화된 동안 마우스 커서를 활성화
-        if (storeUI != null && storeUI.activeSelf)
+        // Player와 충돌하면 상점 UI 활성화
+        if (other.CompareTag("Player"))
         {
-            isActicve = true;
+            ToggleStore();
         }
-        else
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        // Player가 상점 범위를 벗어나면 상점 UI 비활성화
+        if (other.CompareTag("Player"))
         {
-            isActicve=false;
+            ToggleStore();
         }
     }
 
@@ -53,35 +52,41 @@ public class StoreManager : MonoBehaviour
     {
         foreach (var item in storeItems)
         {
+            // 슬롯 생성
             GameObject slot = Instantiate(itemSlotPrefab, itemListParent);
-            slot.GetComponentInChildren<TextMeshProUGUI>().text = item.itemName; // 아이템 이름 표시
-            slot.GetComponent<Button>().onClick.AddListener(() => SelectItem(item)); // 클릭 시 아이템 선택
+
+            // 슬롯 내용 설정
+            var itemContainer = slot.transform.Find("Item"); // "Item" 자식 오브젝트 찾기
+            var BuyButton = slot.transform.Find("BuyButton"); // "Item" 자식 오브젝트 찾기
+            var price = BuyButton.Find("Price").GetComponent<TextMeshProUGUI>(); // "ItemImage" 컴포넌트
+            var slotImage = itemContainer.Find("ItemImage").GetComponent<Image>(); // "ItemImage" 컴포넌트
+            var slotText = slot.transform.Find("ItemName").GetComponent<TextMeshProUGUI>(); // "ItemName" 컴포넌트
+            var slotDescription = slot.transform.Find("ItemDescription").GetComponent<TextMeshProUGUI>(); // "ItemDescription"
+            var buyButton = slot.transform.Find("BuyButton").GetComponent<Button>(); // "BuyButton"
+
+            slotImage.sprite = item.itemIcon; // 아이템 이미지 설정
+            slotText.text = item.itemName; // 아이템 이름 설정
+            slotDescription.text = item.itemDescription; // 아이템 설명 설정
+            price.text = item.itemPrice.ToString();
+
+            // 구매 버튼 동작 설정
+            buyButton.onClick.AddListener(() => BuyItem(item));
         }
     }
 
-    private void SelectItem(SchoolItem item)
+    private void BuyItem(SchoolItem item)
     {
-        selectedItem = item;
-        selectedItemName.text = item.itemName;
-        selectedItemDescription.text = item.itemDescription;
-        selectedItemPrice.text = $"Price: {item.itemPrice}";
-
-        buyButton.interactable = true; // 구매 버튼 활성화
-    }
-
-    public void BuySelectedItem()
-    {
-        if (selectedItem != null && PlayerStats.instance.SpendGold(selectedItem.itemPrice))
+        if (PlayerStats.instance.SpendGold(item.itemPrice))
         {
-            Debug.Log($"{selectedItem.itemName}을(를) 구매했습니다!");
+            Debug.Log($"{item.itemName}을(를) 구매했습니다!");
 
             // 인벤토리에 아이템 추가
             InventoryManager.instance.AddItemToInventory(new InventoryItem
             {
-                itemName = selectedItem.itemName,
-                itemDescription = selectedItem.itemDescription,
-                itemIcon = selectedItem.itemIcon,
-                itemPrice = selectedItem.itemPrice
+                itemName = item.itemName,
+                itemDescription = item.itemDescription,
+                itemIcon = item.itemIcon,
+                itemPrice = item.itemPrice
             });
         }
         else
@@ -92,7 +97,7 @@ public class StoreManager : MonoBehaviour
 
     public void ToggleStore()
     {
-        bool isActive = storeUI.activeSelf;
-        storeUI.SetActive(!isActive); // 상점 UI 활성화/비활성화
+        isActive = !isActive; // 상점 활성화 상태 토글
+        storeUI.SetActive(isActive); // 상점 UI 활성화/비활성화
     }
 }
