@@ -14,6 +14,8 @@ public class InGameSkillManager : MonoBehaviour
 
     public TextMeshProUGUI playerLevel;
 
+    public static bool isSkills;
+
     private InGameSkill[] randomSkills = new InGameSkill[3];
 
     private void Awake()
@@ -24,10 +26,16 @@ public class InGameSkillManager : MonoBehaviour
             Destroy(gameObject);
     }
 
+
+    private void Start()
+    {
+        isSkills = false;
+    }
+
     private void Update()
     {
         // UI가 활성화되어 있으면 마우스 커서를 표시
-        if (skillSelectionUI != null && skillSelectionUI.activeSelf)
+        if (skillSelectionUI != null && skillSelectionUI.activeSelf || (SpecialQuest.isSpecial))
         {
             Cursor.lockState = CursorLockMode.None; // 마우스 잠금 해제
             Cursor.visible = true;                 // 마우스 커서 표시
@@ -46,6 +54,7 @@ public class InGameSkillManager : MonoBehaviour
 
     private void DisplaySkillSelection()
     {
+        isSkills = true;
         skillSelectionUI.SetActive(true);
         playerLevel.text = PlayerStats.instance.level.ToString();
         // 마우스 잠금 해제

@@ -74987,7 +74987,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!81 &2018642511
 AudioListener:
   m_ObjectHideFlags: 0
@@ -75595,6 +75595,10 @@ PrefabInstance:
     - target: {fileID: 3188133331856454161, guid: 9a8fb44b50ce57947875dd97ec9566c6, type: 3}
       propertyPath: CollisionModule.collidesWith.m_Bits
       value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 4387109201334206098, guid: 9a8fb44b50ce57947875dd97ec9566c6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4634365392235080247, guid: 9a8fb44b50ce57947875dd97ec9566c6, type: 3}
       propertyPath: looping

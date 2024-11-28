@@ -12,10 +12,10 @@ public class InGameSkill : MonoBehaviour
     public int damageAmount = 10; // 파티클 데미지
 
     [Header("Skill Information")]
-    public string skillName;         // 스킬 이름
-    public string skillDescription;  // 스킬 설명
-    public Sprite skillIcon;         // 스킬 아이콘 이미지
-    public SkillType skillType;      // 스킬 유형
+    public string skillName = "DefaultSkill";     // 스킬 이름
+    public string skillDescription = "No Description"; // 스킬 설명
+    public Sprite skillIcon;                      // 스킬 아이콘 이미지
+    public SkillType skillType = SkillType.StageEffect; // 스킬 유형
 
     [Header("Stage Effect Settings (For StageEffect Type)")]
     public GameObject skillObject;   // 스킬 오브젝트
@@ -47,7 +47,7 @@ public class InGameSkill : MonoBehaviour
 
         if (playerTransform == null)
         {
-            Debug.LogError("Player Transform not found. Ensure your player has the 'Player' tag.");
+            Debug.LogWarning("Player Transform not found. Ensure your player has the 'Player' tag.");
         }
 
         ResetSkill();
@@ -81,20 +81,21 @@ public class InGameSkill : MonoBehaviour
 
     public void ActivateEffectStage(int level)
     {
+        if (skillObject != null) skillObject.SetActive(true);
+
         switch (level)
         {
             case 1:
-                skillObject?.SetActive(true);
-                stage1Effect?.SetActive(true);
+                if (stage1Effect != null) stage1Effect.SetActive(true);
                 break;
             case 2:
-                stage2Effect?.SetActive(true);
+                if (stage2Effect != null) stage2Effect.SetActive(true);
                 break;
             case 3:
-                stage3Effect?.SetActive(true);
+                if (stage3Effect != null) stage3Effect.SetActive(true);
                 break;
             case 4:
-                stage4Effect?.SetActive(true);
+                if (stage4Effect != null) stage4Effect.SetActive(true);
                 break;
             default:
                 Debug.LogWarning("Invalid level for Stage Effect.");
@@ -111,12 +112,14 @@ public class InGameSkill : MonoBehaviour
             if (!isSpawning)
             {
                 isSpawning = true;
-                InvokeRepeating(nameof(SpawnObjectAroundPlayer), 0, currentInterval);
+                if (playerTransform != null)
+                    InvokeRepeating(nameof(SpawnObjectAroundPlayer), 0, currentInterval);
             }
             else
             {
                 CancelInvoke(nameof(SpawnObjectAroundPlayer));
-                InvokeRepeating(nameof(SpawnObjectAroundPlayer), 0, currentInterval);
+                if (playerTransform != null)
+                    InvokeRepeating(nameof(SpawnObjectAroundPlayer), 0, currentInterval);
             }
         }
     }
@@ -128,7 +131,8 @@ public class InGameSkill : MonoBehaviour
             if (!isParticleActive)
             {
                 isParticleActive = true;
-                InvokeRepeating(nameof(SpawnParticleAroundPlayer), 0, particleInterval);
+                if (playerTransform != null)
+                    InvokeRepeating(nameof(SpawnParticleAroundPlayer), 0, particleInterval);
             }
         }
     }
@@ -151,7 +155,7 @@ public class InGameSkill : MonoBehaviour
         GameObject particle = Instantiate(particlePrefab, playerTransform.position + Random.insideUnitSphere * 3f, Quaternion.identity);
         ParticleSystem particleSystem = particle.GetComponent<ParticleSystem>();
 
-        if (particleSystem != null)
+        if (particleSystem != null && currentLevel - 1 < particleSizes.Length)
         {
             var main = particleSystem.main;
             main.startSize = particleSizes[currentLevel - 1];

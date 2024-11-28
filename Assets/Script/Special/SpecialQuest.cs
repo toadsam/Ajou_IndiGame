@@ -16,11 +16,13 @@ public class SpecialQuest : MonoBehaviour
     private bool isMissionActive = false;
     private float timer = 30f;
 
+    public static bool isSpecial;
     private enum MissionType { FindObject, ReachMonster, KillMonsters }
     private MissionType currentMission;
 
     private void Start()
     {
+        isSpecial = false;
         // 태그로 오브젝트 찾기
         player = GameObject.FindGameObjectWithTag("Player");
         if (player == null)
@@ -89,13 +91,15 @@ public class SpecialQuest : MonoBehaviour
         Transform panel = upgradeUI?.transform.Find("Panel");
         if (panel != null && panel.gameObject.activeSelf)
         {
-            Cursor.lockState = CursorLockMode.None; // 마우스 잠금 해제
-            Cursor.visible = true;                 // 마우스 커서 표시
+            isSpecial = true;
+         //  Cursor.lockState = CursorLockMode.None; // 마우스 잠금 해제
+           // Cursor.visible = true;                 // 마우스 커서 표시
         }
         else
         {
-            Cursor.lockState = CursorLockMode.Locked; // 마우스 잠금
-            Cursor.visible = false;                  // 마우스 커서 숨기기
+            isSpecial = false;
+            //Cursor.lockState = CursorLockMode.Locked; // 마우스 잠금
+            //Cursor.visible = false;                  // 마우스 커서 숨기기
         }
 
         // NPC가 일정 시간 동안 상호작용이 없으면 제거
@@ -122,7 +126,9 @@ public class SpecialQuest : MonoBehaviour
 
     private IEnumerator StartRandomMission()
     {
-        currentMission = (MissionType)Random.Range(0, 3);
+
+        currentMission = (MissionType)2;
+        //currentMission = (MissionType)Random.Range(0, 3);
         Debug.Log($"랜덤 미션 시작: {currentMission}");
 
         switch (currentMission)

@@ -79,12 +79,13 @@ public class CharacterSelectManager : MonoBehaviour
             GameObject slot = Instantiate(characterSlotPrefab, characterListParent);
 
             // 버튼의 Image 컴포넌트 가져오기
-            var slotButtonImage = slot.GetComponent<Image>();
+            //var slotButtonImage = slot.GetComponent<Image>();
+            var Image = slot.transform.Find("ItemIcon").GetComponent<Image>();
             var slotName = slot.transform.Find("CharacterNameText").GetComponent<TextMeshProUGUI>();
             var slotSelectionText = slot.transform.Find("SelectionText").GetComponent<TextMeshProUGUI>();
 
             // 이미지와 이름 설정
-            slotButtonImage.sprite = character.characterImage;
+            Image.sprite = character.characterImage;
             slotName.text = character.characterName;
 
             // "선택 중" 표시 초기화
