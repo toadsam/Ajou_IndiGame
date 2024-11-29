@@ -116,7 +116,7 @@ public class SupportCharacterAI : MonoBehaviour
 
             Vector3 spawnPosition = transform.position + randomOffset;
             GameObject particle = Instantiate(attackParticlePrefab, spawnPosition, Quaternion.identity);
-            Destroy(particle, 2f); // 파티클을 2초 후에 제거
+            Destroy(particle, 5f); // 파티클을 2초 후에 제거
         }
 
         // 실제 공격 로직

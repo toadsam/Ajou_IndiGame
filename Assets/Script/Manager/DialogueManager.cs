@@ -73,7 +73,7 @@ public class DialogueManager : MonoBehaviour
         };
         portalDialogues["WoncheonHallPortal"] = new string[] {
             "이곳은 많은 학생들이 실험으로 고통받는 곳 입니다.....",
-            "이곳에 가면 실험으로 인해 변질된 몬스터,,,,마지막에는 실험으로 인해 타락한 대학생을 볼 수 있어요....",
+            "이곳에 가면 실험으로 인해 변질된 몬스터....마지막에는 실험으로 인해 타락한 대학생을 볼 수 있어요....",
             "들어가서 구할 준비가 되었을까요???"
         };
     }

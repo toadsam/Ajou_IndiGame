@@ -91,7 +91,7 @@ public class SpecialQuest : MonoBehaviour
 
         // 몬스터 생성
         Debug.Log("미션: 20초 내에 몬스터 5마리 처치하기");
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 100; i++)
         {
             var monster = Instantiate(monsterPrefab, RandomPosition(), Quaternion.identity);
             spawnedMonsters.Add(monster);
@@ -179,7 +179,7 @@ public class SpecialQuest : MonoBehaviour
             case MissionType.ReachMonster:
                 return "소환된 몬스터와 접촉하세요!";
             case MissionType.KillMonsters:
-                return "몬스터 5마리를 처치하세요!";
+                return "몬스터 100마리를 처치하세요!";
             default:
                 return "알 수 없는 미션입니다.";
         }
