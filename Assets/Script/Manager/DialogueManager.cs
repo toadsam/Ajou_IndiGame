@@ -16,10 +16,12 @@ public class DialogueManager : MonoBehaviour
     public Button confirmButton;
 
     private string[] startGameDialogue = {
-        "아주 대탐험에 오신 것을 환영합니다!!",
-        "재훈재훈과 함께 모험을 떠나볼까요??",
-        "우선 원천관으로~~!!"
-    };
+    "아주 대탐험에 오신 것을 환영합니다!",
+    "우리의 목표는 아주대학교를 무사히 졸업하는 것입니다!",
+    "하지만 졸업하기 위해서는 많은 실험과 유혹을 이겨내고, 가장 높이 있는 산학원에서 '졸업'이라는 몬스터를 물리쳐야 합니다!",
+    "재훈재훈과 함께 모험을 떠날 준비가 되었나요?",
+    "출발~!"
+};
 
     private Dictionary<string, string[]> portalDialogues = new Dictionary<string, string[]>();
     private string targetSceneName;
@@ -64,7 +66,7 @@ public class DialogueManager : MonoBehaviour
 
     private void InitializePortalDialogues()
     {
-        portalDialogues["SeonghoHallPortal"] = new string[] {
+        portalDialogues["SanhakHallPortal"] = new string[] {
             "This portal leads to Seongho Hall.",
             "It's known for its beautiful architecture.",
             "Would you like to proceed?"

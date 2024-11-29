@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Student Union.unity
     guid: 60522ce428764b142ad0b5581188158d
+  - enabled: 1
+    path: Assets/Scenes/SanhakHallScene.unity
+    guid: cc4436d44c8a8f94c91c2fab422b59b6
   m_configObjects: {}
