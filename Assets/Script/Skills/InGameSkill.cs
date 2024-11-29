@@ -191,4 +191,9 @@ public class InGameSkill : MonoBehaviour
             Debug.Log("OnParticleCollision이 발생하지 않음. 파티클 활성 상태: " + isParticleActive);
         }
     }
+
+    public int GetSkillLevel()
+    {
+        return currentLevel;
+    }
 }

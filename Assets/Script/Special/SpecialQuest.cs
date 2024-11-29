@@ -1,29 +1,37 @@
 using System.Collections;
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class SpecialQuest : MonoBehaviour
 {
-    public GameObject missionTargetPrefab;        // 미션 타겟 프리팹
-    public GameObject monsterPrefab;             // 몬스터 프리팹
+    public GameObject missionTargetPrefab; // 미션 타겟 프리팹
+    public GameObject monsterPrefab;      // 몬스터 프리팹
+    public GameObject playTimeInfo;       // 제한시간 UI
+    public GameObject playStageTitle;     // 미션 이름 및 상태 표시 UI
 
-    private GameObject player;                   // Player 오브젝트
-    private GameObject missionTarget;            // 미션 타겟 인스턴스
-    private GameObject upgradeUI;                // 속성 선택 UI 인스턴스
-    private Button speedButton, attackButton, defenseButton;
-    private Transform[] randomPositions;         // 랜덤 위치 배열
+    [Header("Text References")]
+    public TextMeshProUGUI timeText;      // 제한시간 텍스트 (playTimeInfo의 자식)
+    public TextMeshProUGUI stageTitleText; // 미션 이름 텍스트 (playStageTitle의 자식)
+
+    private GameObject player;            // Player 오브젝트
+    private GameObject missionTarget;     // 미션 타겟 인스턴스
+    private List<GameObject> spawnedMonsters = new List<GameObject>(); // 생성된 몬스터 리스트
 
     private bool isMissionActive = false;
     private float timer = 30f;
 
     public static bool isSpecial;
+
     private enum MissionType { FindObject, ReachMonster, KillMonsters }
     private MissionType currentMission;
 
     private void Start()
     {
         isSpecial = false;
-        // 태그로 오브젝트 찾기
+
+        // 플레이어 초기화
         player = GameObject.FindGameObjectWithTag("Player");
         if (player == null)
         {
@@ -31,78 +39,20 @@ public class SpecialQuest : MonoBehaviour
             return;
         }
 
-        // 랜덤 위치 배열 초기화
-        GameObject randomPositionParent = GameObject.FindGameObjectWithTag("RandomPosition");
-        if (randomPositionParent != null)
-        {
-            randomPositions = new Transform[randomPositionParent.transform.childCount];
-            for (int i = 0; i < randomPositionParent.transform.childCount; i++)
-            {
-                randomPositions[i] = randomPositionParent.transform.GetChild(i);
-            }
-            Debug.Log("Random Positions 배열 할당 완료");
-        }
-        else
-        {
-            Debug.LogError("RandomPosition 태그의 오브젝트가 없습니다.");
-            return;
-        }
+        // UI 초기화
+        if (playTimeInfo != null) playTimeInfo.SetActive(false);
+        if (playStageTitle != null) playStageTitle.SetActive(false);
 
-        // Upgrade UI 찾기
-        upgradeUI = GameObject.FindGameObjectWithTag("UpgradeUI");
-        if (upgradeUI == null)
-        {
-            Debug.LogError("UpgradeUI 오브젝트를 찾을 수 없습니다.");
-            return;
-        }
-
-        upgradeUI.SetActive(true); // 임시 활성화
-
-        Transform buttonsParent = upgradeUI.transform.Find("Panel/Buttons"); // Buttons 오브젝트 찾기
-        if (buttonsParent == null)
-        {
-            Debug.LogError("Buttons 오브젝트를 찾을 수 없습니다.");
-            return;
-        }
-
-        // Buttons 오브젝트 내부에서 각 버튼을 찾음
-        speedButton = buttonsParent.Find("SpeedButton")?.GetComponent<Button>();
-        attackButton = buttonsParent.Find("AttackButton")?.GetComponent<Button>();
-        defenseButton = buttonsParent.Find("DefenseButton")?.GetComponent<Button>();
-
-        if (speedButton == null || attackButton == null || defenseButton == null)
-        {
-            Debug.LogError("SpeedButton, AttackButton 또는 DefenseButton 중 하나를 찾을 수 없습니다.");
-            return;
-        }
-        // 버튼 클릭 이벤트 설정
-        speedButton.onClick.AddListener(() => UpgradePlayer("speed"));
-        attackButton.onClick.AddListener(() => UpgradePlayer("attack"));
-        defenseButton.onClick.AddListener(() => UpgradePlayer("defense"));
-
-        // 미션 타겟 생성
         missionTarget = Instantiate(missionTargetPrefab);
-        missionTarget.SetActive(false); // 미션 시작 전까지 비활성화
+        missionTarget.SetActive(false);
+
+        // 퀘스트 시작 알림
+        StartCoroutine(ShowQuestAnnouncement());
     }
 
     private void Update()
     {
-        // Panel이 활성화되어 있는 동안에만 마우스 커서 표시
-        Transform panel = upgradeUI?.transform.Find("Panel");
-        if (panel != null && panel.gameObject.activeSelf)
-        {
-            isSpecial = true;
-         //  Cursor.lockState = CursorLockMode.None; // 마우스 잠금 해제
-           // Cursor.visible = true;                 // 마우스 커서 표시
-        }
-        else
-        {
-            isSpecial = false;
-            //Cursor.lockState = CursorLockMode.Locked; // 마우스 잠금
-            //Cursor.visible = false;                  // 마우스 커서 숨기기
-        }
-
-        // NPC가 일정 시간 동안 상호작용이 없으면 제거
+        // NPC와 상호작용하지 않으면 타이머가 감소
         if (!isMissionActive)
         {
             timer -= Time.deltaTime;
@@ -118,7 +68,6 @@ public class SpecialQuest : MonoBehaviour
     {
         if (!isMissionActive && other.CompareTag("Player"))
         {
-            Debug.Log("Player가 NPC와 접촉하여 미션을 시작합니다.");
             StartCoroutine(StartRandomMission());
             isMissionActive = true;
         }
@@ -126,105 +75,66 @@ public class SpecialQuest : MonoBehaviour
 
     private IEnumerator StartRandomMission()
     {
+        currentMission = MissionType.KillMonsters;
 
-        currentMission = (MissionType)2;
-        //currentMission = (MissionType)Random.Range(0, 3);
-        Debug.Log($"랜덤 미션 시작: {currentMission}");
-
-        switch (currentMission)
+        // 미션 이름 UI 표시
+        if (stageTitleText != null)
         {
-            case MissionType.FindObject:
-                missionTarget.transform.position = randomPositions[Random.Range(0, randomPositions.Length)].position;
-                missionTarget.SetActive(true);
-                Debug.Log("미션: 지정된 위치로 이동하여 오브젝트와 접촉하기");
-
-                yield return StartCoroutine(MissionTimer(10f, () =>
-                    Vector3.Distance(player.transform.position, missionTarget.transform.position) < 1f
-                ));
-                missionTarget.SetActive(false);
-                break;
-
-            case MissionType.ReachMonster:
-                GameObject monster = Instantiate(monsterPrefab, randomPositions[Random.Range(0, randomPositions.Length)].position, Quaternion.identity);
-                monster.tag = "Monster"; // 몬스터 태그 설정
-                Debug.Log("미션: 소환된 몬스터와 12초 내에 접촉하기");
-
-                if (monster.GetComponent<Collider>() == null)
-                {
-                    monster.AddComponent<BoxCollider>(); // Collider 추가
-                    Debug.Log("BoxCollider가 몬스터에 추가되었습니다.");
-                }
-
-                // MissionTimer 호출
-                yield return StartCoroutine(MissionTimer(12f, () =>
-                {
-                    if (monster == null) return false; // 몬스터가 이미 파괴된 경우
-                    float distance = Vector3.Distance(player.transform.position, monster.transform.position);
-                    Debug.Log($"플레이어와 몬스터의 거리: {distance}");
-                    return distance < 1f; // 거리 조건
-                }));
-
-                // 몬스터 제거 및 후속 처리
-                if (monster != null)
-                {
-                    Destroy(monster);
-                    Debug.Log("몬스터 제거 완료");
-                }
-
-                // 미션 성공 후 처리
-                if (MissionSuccess())
-                {
-                    Debug.Log("미션 성공: 소환된 몬스터와 접촉 성공");
-
-                    // UI 활성화
-                    GameObject panel = upgradeUI.transform.Find("Panel")?.gameObject;
-                    if (panel != null)
-                    {
-                        panel.SetActive(true);           // Panel 활성화
-                        upgradeUI.SetActive(true);       // Upgrade UI 활성화
-                        Debug.Log("업그레이드 UI 활성화 완료");
-                    }
-                    else
-                    {
-                        Debug.LogError("Panel 오브젝트를 찾을 수 없습니다.");
-                    }
-                }
-                else
-                {
-                    Debug.Log("미션 실패!");
-                }
-                break;
-
-
-            case MissionType.KillMonsters:
-                Debug.Log("미션: 20초 내에 소환된 몬스터 5마리 처치하기");
-                for (int i = 0; i < 5; i++)
-                {
-                    Instantiate(monsterPrefab, randomPositions[Random.Range(0, randomPositions.Length)].position, Quaternion.identity);
-                }
-
-                yield return StartCoroutine(MissionTimer(20f, () =>
-                    GameObject.FindGameObjectsWithTag("Monster").Length == 0
-                ));
-                break;
+            stageTitleText.text = $"돌발미션! {GetMissionText(currentMission)}";
+        }
+        if (playStageTitle != null)
+        {
+            playStageTitle.SetActive(true);
+            yield return new WaitForSeconds(3f);
+            playStageTitle.SetActive(false);
         }
 
-        if (MissionSuccess())
+        // 몬스터 생성
+        Debug.Log("미션: 20초 내에 몬스터 5마리 처치하기");
+        for (int i = 0; i < 5; i++)
         {
-            Debug.Log("미션 성공! 보상 선택 UI를 표시합니다.");
+            var monster = Instantiate(monsterPrefab, RandomPosition(), Quaternion.identity);
+            spawnedMonsters.Add(monster);
+        }
 
-            GameObject panel = upgradeUI.transform.Find("Panel")?.gameObject;
-            if (panel != null)
+        // 제한 시간 UI 활성화
+        if (playTimeInfo != null) playTimeInfo.SetActive(true);
+
+        // 타이머 시작
+        bool success = false;
+        yield return StartCoroutine(MissionTimer(20f, () =>
+        {
+            success = spawnedMonsters.TrueForAll(m => m == null); // 모든 몬스터가 파괴되었는지 확인
+            return success;
+        }));
+
+        // 제한 시간 UI 비활성화
+        if (playTimeInfo != null) playTimeInfo.SetActive(false);
+
+        // 미션 결과 UI 표시
+        if (playStageTitle != null && stageTitleText != null)
+        {
+            playStageTitle.SetActive(true);
+            if (success)
             {
-                panel.SetActive(true);
-                upgradeUI.SetActive(true);
+                stageTitleText.text = "미션 성공!";
             }
             else
             {
-                Debug.LogError("Panel 오브젝트를 찾을 수 없습니다.");
+                stageTitleText.text = "미션 실패!";
             }
+
+            yield return new WaitForSeconds(3f);
+            playStageTitle.SetActive(false);
         }
+
+        // 모든 몬스터 제거
+        ClearSpawnedMonsters();
+
+        // 이 스크립트 제거
+        Destroy(gameObject);
     }
+
 
     private IEnumerator MissionTimer(float duration, System.Func<bool> successCondition)
     {
@@ -232,48 +142,70 @@ public class SpecialQuest : MonoBehaviour
         while (missionTimer > 0f)
         {
             missionTimer -= Time.deltaTime;
+
+            // 제한 시간 UI 업데이트
+            if (timeText != null)
+            {
+                timeText.text = $"남은 시간: {Mathf.CeilToInt(missionTimer)}초";
+            }
+
+            // 성공 조건 충족 시 종료
             if (successCondition.Invoke())
             {
                 yield break;
             }
+
             yield return null;
         }
     }
 
-    private bool MissionSuccess()
+    private void ClearSpawnedMonsters()
     {
-        switch (currentMission)
+        for (int i = spawnedMonsters.Count - 1; i >= 0; i--)
+        {
+            if (spawnedMonsters[i] != null)
+            {
+                Destroy(spawnedMonsters[i]);
+            }
+        }
+        spawnedMonsters.Clear();
+    }
+    private string GetMissionText(MissionType missionType)
+    {
+        switch (missionType)
         {
             case MissionType.FindObject:
-                return Vector3.Distance(player.transform.position, missionTarget.transform.position) < 1f;
-
+                return "지정된 위치에서 물체를 찾으세요!";
             case MissionType.ReachMonster:
+                return "소환된 몬스터와 접촉하세요!";
             case MissionType.KillMonsters:
-                return GameObject.FindGameObjectsWithTag("Monster").Length == 0;
-
+                return "몬스터 5마리를 처치하세요!";
             default:
-                return false;
+                return "알 수 없는 미션입니다.";
         }
     }
 
-    private void UpgradePlayer(string attribute)
+    private IEnumerator ShowQuestAnnouncement()
     {
-        PlayerStats playerStats = player.GetComponent<PlayerStats>();
-        switch (attribute)
+        if (stageTitleText != null)
         {
-            case "speed":
-                playerStats.strength += 1; // 속도 증가
-                Debug.Log("Player 속도가 증가했습니다.");
-                break;
-            case "attack":
-                playerStats.strength += 1; // 공격력 증가
-                Debug.Log("Player 공격력이 증가했습니다.");
-                break;
-            case "defense":
-                playerStats.defense += 1; // 방어력 증가
-                Debug.Log("Player 방어력이 증가했습니다.");
-                break;
+            stageTitleText.text = "스페셜 퀘스트 등장!";
         }
-        upgradeUI.SetActive(false); // UI 비활성화
+        if (playStageTitle != null)
+        {
+            playStageTitle.SetActive(true);
+            yield return new WaitForSeconds(3f);
+            playStageTitle.SetActive(false);
+        }
+    }
+
+    private Vector3 RandomPosition()
+    {
+        Transform randomPositionParent = GameObject.FindGameObjectWithTag("RandomPosition").transform;
+        if (randomPositionParent == null || randomPositionParent.childCount == 0)
+            return Vector3.zero;
+
+        Transform randomPosition = randomPositionParent.GetChild(Random.Range(0, randomPositionParent.childCount));
+        return randomPosition.position;
     }
 }
