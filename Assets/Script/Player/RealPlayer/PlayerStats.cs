@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerStats : MonoBehaviour
 {
@@ -24,6 +25,8 @@ public class PlayerStats : MonoBehaviour
     public int experience = 0;
     public int experienceToNextLevel = 100;
 
+    public Slider healthSlider; // 체력 슬라이더
+
     [Header("Currency")]
     public int gold = 500; // 플레이어의 초기 재화
 
@@ -44,6 +47,12 @@ public class PlayerStats : MonoBehaviour
     {
         currentHealth = maxHealth;
         currentMana = maxMana;
+
+        if (healthSlider != null)
+        {
+            healthSlider.maxValue = maxHealth; // 슬라이더 최대값 설정
+            healthSlider.value = currentHealth; // 초기 체력 값 설정
+        }
     }
 
     private void Update()
@@ -52,14 +61,14 @@ public class PlayerStats : MonoBehaviour
         RegenerateMana();
     }
 
-    private void RegenerateHealth()
+  /*  private void RegenerateHealth()
     {
         if (currentHealth < maxHealth)
         {
             currentHealth += Mathf.FloorToInt(healthRegenRate * Time.deltaTime);
             currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
         }
-    }
+    }*/
 
     private void RegenerateMana()
     {
@@ -76,9 +85,28 @@ public class PlayerStats : MonoBehaviour
         currentHealth -= finalDamage;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
 
+        if (healthSlider != null)
+        {
+            healthSlider.value = currentHealth; // 슬라이더 값 업데이트
+        }
+
         if (currentHealth <= 0)
         {
             Die();
+        }
+    }
+
+    private void RegenerateHealth()
+    {
+        if (currentHealth < maxHealth)
+        {
+            currentHealth += Mathf.FloorToInt(healthRegenRate * Time.deltaTime);
+            currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
+
+            if (healthSlider != null)
+            {
+                healthSlider.value = currentHealth; // 슬라이더 값 업데이트
+            }
         }
     }
 
